@@ -59,7 +59,9 @@ export default function Register({ passwordRules }: Props) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="phone">Phone Number (Optional)</Label>
+                                <Label htmlFor="phone">
+                                    Phone Number (Optional)
+                                </Label>
                                 <Input
                                     id="phone"
                                     type="tel"
@@ -105,7 +107,7 @@ export default function Register({ passwordRules }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full bg-[#E50914] text-white hover:bg-red-700 shadow-lg shadow-red-950/40 font-semibold"
+                                className="mt-2 w-full bg-[#E50914] font-semibold text-white shadow-lg shadow-red-950/40 hover:bg-red-700"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -116,7 +118,11 @@ export default function Register({ passwordRules }: Props) {
 
                         <div className="text-center text-sm text-zinc-400">
                             Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6} className="font-semibold text-[#E50914] hover:text-red-400">
+                            <TextLink
+                                href={login()}
+                                tabIndex={6}
+                                className="font-semibold text-[#E50914] hover:text-red-400"
+                            >
                                 Log in
                             </TextLink>
                         </div>

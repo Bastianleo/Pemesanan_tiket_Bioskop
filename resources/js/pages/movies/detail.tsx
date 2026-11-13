@@ -69,7 +69,8 @@ export default function MovieDetail({
 
     const getEmbedUrl = (url: string | null) => {
         if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const regExp =
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/;
         const match = url.match(regExp);
         return match && match[2].length === 11
             ? `https://www.youtube.com/embed/${match[2]}?autoplay=1`
@@ -82,7 +83,7 @@ export default function MovieDetail({
         router.get(
             `/movies/${movie.slug}`,
             { date, city: selectedCity },
-            { preserveState: true, preserveScroll: true }
+            { preserveState: true, preserveScroll: true },
         );
     };
 
@@ -90,7 +91,7 @@ export default function MovieDetail({
         router.get(
             `/movies/${movie.slug}`,
             { date: selectedDate, city },
-            { preserveState: true, preserveScroll: true }
+            { preserveState: true, preserveScroll: true },
         );
     };
 
@@ -102,13 +103,29 @@ export default function MovieDetail({
     const getStudioBadge = (type: string) => {
         switch (type) {
             case 'imax':
-                return <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">IMAX Laser</span>;
+                return (
+                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        IMAX Laser
+                    </span>
+                );
             case 'vip_premiere':
-                return <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">VIP Premiere</span>;
+                return (
+                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        VIP Premiere
+                    </span>
+                );
             case 'deluxe':
-                return <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">Deluxe</span>;
+                return (
+                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        Deluxe
+                    </span>
+                );
             default:
-                return <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">Regular 2D</span>;
+                return (
+                    <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        Regular 2D
+                    </span>
+                );
         }
     };
 
@@ -121,34 +138,44 @@ export default function MovieDetail({
                 <img
                     src={movie.banner_path || movie.poster_path}
                     alt={movie.title}
-                    className="h-full w-full object-cover filter brightness-[0.35]"
+                    className="h-full w-full object-cover brightness-[0.35] filter"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/60 to-transparent pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/70 to-transparent pointer-events-none" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/60 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/70 to-transparent" />
             </div>
 
             {/* Main Movie Info & Schedule Picker */}
-            <div className="mx-auto max-w-[1600px] w-full px-4 sm:px-6 lg:px-8 xl:px-12 -mt-24 sm:-mt-32 relative z-10 pb-16 space-y-12">
+            <div className="relative z-10 mx-auto -mt-24 w-full max-w-[1600px] space-y-12 px-4 pb-16 sm:-mt-32 sm:px-6 lg:px-8 xl:px-12">
                 {/* Header Profile Card */}
-                <div className="flex flex-col gap-6 md:flex-row md:items-start justify-between">
-                    <div className="flex flex-col gap-6 md:flex-row md:items-start flex-1 min-w-0">
+                <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+                    <div className="flex min-w-0 flex-1 flex-col gap-6 md:flex-row md:items-start">
                         {/* Poster */}
                         <div className="w-40 shrink-0 overflow-hidden rounded-xl border border-[#27272A] bg-[#111114] shadow-2xl sm:w-52">
                             <img
-                                src={movie.poster_path ? (movie.poster_path.startsWith('http') || movie.poster_path.startsWith('/') ? movie.poster_path : `/storage/${movie.poster_path}`) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'}
+                                src={
+                                    movie.poster_path
+                                        ? movie.poster_path.startsWith(
+                                              'http',
+                                          ) || movie.poster_path.startsWith('/')
+                                            ? movie.poster_path
+                                            : `/storage/${movie.poster_path}`
+                                        : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
+                                }
                                 alt={movie.title}
                                 className="aspect-[2/3] w-full object-cover"
                             />
                         </div>
 
                         {/* Metadata Details */}
-                        <div className="flex-1 space-y-4 pt-2 min-w-0">
+                        <div className="min-w-0 flex-1 space-y-4 pt-2">
                             <div className="flex flex-wrap items-center gap-2">
-                                <span className="rounded bg-[#18181B] px-2 py-0.5 text-xs font-semibold text-zinc-300 border border-[#27272A]">
+                                <span className="rounded border border-[#27272A] bg-[#18181B] px-2 py-0.5 text-xs font-semibold text-zinc-300">
                                     {movie.rating_age}
                                 </span>
-                                <span className="rounded bg-zinc-800 px-2 py-0.5 text-xs font-medium text-zinc-300 border border-zinc-700">
-                                    {movie.status === 'now_showing' ? 'Sedang Tayang' : 'Segera Tayang'}
+                                <span className="rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-xs font-medium text-zinc-300">
+                                    {movie.status === 'now_showing'
+                                        ? 'Sedang Tayang'
+                                        : 'Segera Tayang'}
                                 </span>
                                 <div className="flex items-center gap-1.5 text-xs text-[#A1A1AA]">
                                     <Clock className="size-3.5 text-zinc-400" />
@@ -164,99 +191,133 @@ export default function MovieDetail({
                                 {movie.genres?.map((g) => (
                                     <span
                                         key={g.id}
-                                        className="rounded bg-[#18181B] border border-[#27272A] px-2.5 py-1 text-xs font-medium text-[#A1A1AA]"
+                                        className="rounded border border-[#27272A] bg-[#18181B] px-2.5 py-1 text-xs font-medium text-[#A1A1AA]"
                                     >
                                         {g.name}
                                     </span>
                                 ))}
                             </div>
 
-                        <div className="grid gap-2 border-y border-[#27272A] py-3.5 text-xs text-zinc-300 sm:grid-cols-2">
-                            <div><strong className="text-[#71717A]">Sutradara:</strong> {movie.director}</div>
-                            <div><strong className="text-[#71717A]">Tanggal Rilis:</strong> {movie.release_date}</div>
-                            <div><strong className="text-[#71717A]">Bahasa:</strong> {movie.language} (Sub: {movie.subtitle})</div>
-                            <div className="line-clamp-1"><strong className="text-[#71717A]">Pemeran:</strong> {movie.cast}</div>
-                        </div>
+                            <div className="grid gap-2 border-y border-[#27272A] py-3.5 text-xs text-zinc-300 sm:grid-cols-2">
+                                <div>
+                                    <strong className="text-[#71717A]">
+                                        Sutradara:
+                                    </strong>{' '}
+                                    {movie.director}
+                                </div>
+                                <div>
+                                    <strong className="text-[#71717A]">
+                                        Tanggal Rilis:
+                                    </strong>{' '}
+                                    {movie.release_date}
+                                </div>
+                                <div>
+                                    <strong className="text-[#71717A]">
+                                        Bahasa:
+                                    </strong>{' '}
+                                    {movie.language} (Sub: {movie.subtitle})
+                                </div>
+                                <div className="line-clamp-1">
+                                    <strong className="text-[#71717A]">
+                                        Pemeran:
+                                    </strong>{' '}
+                                    {movie.cast}
+                                </div>
+                            </div>
 
-                        <div className="space-y-1">
-                            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#71717A]">Sinopsis Cerita</h3>
-                            <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed max-w-3xl">
-                                {movie.synopsis}
-                            </p>
-                        </div>
+                            <div className="space-y-1">
+                                <h3 className="text-xs font-semibold tracking-wider text-[#71717A] uppercase">
+                                    Sinopsis Cerita
+                                </h3>
+                                <p className="max-w-3xl text-xs leading-relaxed text-[#A1A1AA] sm:text-sm">
+                                    {movie.synopsis}
+                                </p>
+                            </div>
 
-                        <div className="pt-1 flex flex-wrap items-center gap-2">
-                            {embedUrl && (
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                {embedUrl && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={() => setTrailerOpen(true)}
+                                        className="h-8 cursor-pointer rounded-lg border border-zinc-700 bg-zinc-800 text-xs font-medium text-white hover:bg-zinc-700"
+                                    >
+                                        <Play className="mr-1.5 size-3 fill-current text-red-500" />
+                                        Putar Trailer
+                                    </Button>
+                                )}
+
                                 <Button
-                                    type="button"
+                                    variant="outline"
                                     size="sm"
-                                    onClick={() => setTrailerOpen(true)}
-                                    className="h-8 bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-white border border-zinc-700 rounded-lg cursor-pointer"
+                                    onClick={() =>
+                                        router.post(
+                                            `/favorites/${movie.id}/toggle`,
+                                            {},
+                                            { preserveScroll: true },
+                                        )
+                                    }
+                                    className="h-8 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:border-zinc-700 hover:text-white"
                                 >
-                                    <Play className="mr-1.5 size-3 fill-current text-red-500" />
-                                    Putar Trailer
+                                    <Heart className="mr-1.5 size-3.5 text-red-500" />
+                                    Favorit
                                 </Button>
-                            )}
 
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => router.post(`/favorites/${movie.id}/toggle`, {}, { preserveScroll: true })}
-                                className="h-8 border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:text-white hover:border-zinc-700 rounded-lg"
-                            >
-                                <Heart className="mr-1.5 size-3.5 text-red-500" />
-                                Favorit
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleShare}
-                                className="h-8 border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:text-white hover:border-zinc-700 rounded-lg"
-                            >
-                                <Share2 className="mr-1.5 size-3.5" />
-                                Bagikan
-                            </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleShare}
+                                    className="h-8 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:border-zinc-700 hover:text-white"
+                                >
+                                    <Share2 className="mr-1.5 size-3.5" />
+                                    Bagikan
+                                </Button>
+                            </div>
                         </div>
                     </div>
+
+                    {/* Trailer Button on Top Right (Desktop) */}
+                    {embedUrl && (
+                        <div className="hidden shrink-0 pt-2 md:block">
+                            <Button
+                                type="button"
+                                onClick={() => setTrailerOpen(true)}
+                                size="sm"
+                                className="h-9 cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900/90 px-4 font-medium text-white shadow-xl backdrop-blur-md transition-transform hover:scale-105 hover:bg-zinc-800"
+                            >
+                                <Play className="mr-1.5 size-3.5 fill-current text-white" />
+                                Putar Trailer
+                            </Button>
+                        </div>
+                    )}
                 </div>
 
-                {/* Trailer Button on Top Right (Desktop) */}
-                {embedUrl && (
-                    <div className="shrink-0 pt-2 hidden md:block">
-                        <Button
-                            type="button"
-                            onClick={() => setTrailerOpen(true)}
-                            size="sm"
-                            className="rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-white font-medium px-4 h-9 border border-zinc-700 shadow-xl cursor-pointer transition-transform hover:scale-105 backdrop-blur-md"
-                        >
-                            <Play className="mr-1.5 size-3.5 fill-current text-white" />
-                            Putar Trailer
-                        </Button>
-                    </div>
-                )}
-            </div>
-
                 {/* SHOWTIMES BOOKING WIDGET */}
-                <div id="jadwal-tayang" className="space-y-6 pt-2 scroll-mt-24">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[#27272A] pb-4">
+                <div id="jadwal-tayang" className="scroll-mt-24 space-y-6 pt-2">
+                    <div className="flex flex-col gap-4 border-b border-[#27272A] pb-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                            <h2 className="text-lg font-bold tracking-tight text-white sm:text-xl">
                                 Jadwal Tayang Bioskop
                             </h2>
-                            <p className="text-xs text-[#A1A1AA] mt-0.5">
-                                Pilih tanggal dan jam tayang yang sesuai untuk memesan tiket.
+                            <p className="mt-0.5 text-xs text-[#A1A1AA]">
+                                Pilih tanggal dan jam tayang yang sesuai untuk
+                                memesan tiket.
                             </p>
                         </div>
 
                         {/* City Selector */}
                         <div className="flex items-center gap-2">
-                            <span className="text-xs text-[#71717A]">Kota:</span>
-                            <Select value={selectedCity} onValueChange={handleCityChange}>
-                                <SelectTrigger className="w-44 bg-[#18181B] border-[#27272A] text-xs text-zinc-200 rounded-lg h-8.5">
+                            <span className="text-xs text-[#71717A]">
+                                Kota:
+                            </span>
+                            <Select
+                                value={selectedCity}
+                                onValueChange={handleCityChange}
+                            >
+                                <SelectTrigger className="h-8.5 w-44 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-200">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-[#18181B] border-[#27272A] text-zinc-200">
+                                <SelectContent className="border-[#27272A] bg-[#18181B] text-zinc-200">
                                     {cities.map((city) => (
                                         <SelectItem key={city} value={city}>
                                             <div className="flex items-center gap-1.5">
@@ -271,7 +332,7 @@ export default function MovieDetail({
                     </div>
 
                     {/* Available Date Tabs */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                    <div className="flex scrollbar-none items-center gap-2 overflow-x-auto pb-2">
                         {availableDates.map((item) => {
                             const isSelected = item.date === selectedDate;
                             return (
@@ -279,14 +340,18 @@ export default function MovieDetail({
                                     key={item.date}
                                     type="button"
                                     onClick={() => handleDateChange(item.date)}
-                                    className={`flex flex-col items-center justify-center rounded-lg px-4 py-2 transition-colors shrink-0 ${
+                                    className={`flex shrink-0 flex-col items-center justify-center rounded-lg px-4 py-2 transition-colors ${
                                         isSelected
-                                            ? 'bg-[#E50914] text-white font-semibold'
+                                            ? 'bg-[#E50914] font-semibold text-white'
                                             : 'border border-[#27272A] bg-[#18181B] text-[#A1A1AA] hover:border-zinc-700 hover:text-white'
                                     }`}
                                 >
-                                    <span className="text-[10px] opacity-80">{item.day_name}</span>
-                                    <span className="text-xs font-semibold">{item.formatted}</span>
+                                    <span className="text-[10px] opacity-80">
+                                        {item.day_name}
+                                    </span>
+                                    <span className="text-xs font-semibold">
+                                        {item.formatted}
+                                    </span>
                                 </button>
                             );
                         })}
@@ -294,69 +359,113 @@ export default function MovieDetail({
 
                     {/* Cinemas & Studios Showtimes Matrix */}
                     {cinemas.length === 0 ? (
-                        <div className="flex h-52 flex-col items-center justify-center rounded-xl border border-[#27272A] bg-[#111114] text-center p-6 text-[#A1A1AA]">
-                            <Calendar className="size-8 mb-2 text-[#71717A]" />
-                            <h3 className="text-sm font-semibold text-white">Tidak Ada Jadwal Tayang</h3>
-                            <p className="mt-1 text-xs text-[#71717A] max-w-sm">
-                                Belum ada penayangan film ini di kota <strong>{selectedCity}</strong> pada tanggal terpilih. Silakan coba pilih kota atau tanggal lain.
+                        <div className="flex h-52 flex-col items-center justify-center rounded-xl border border-[#27272A] bg-[#111114] p-6 text-center text-[#A1A1AA]">
+                            <Calendar className="mb-2 size-8 text-[#71717A]" />
+                            <h3 className="text-sm font-semibold text-white">
+                                Tidak Ada Jadwal Tayang
+                            </h3>
+                            <p className="mt-1 max-w-sm text-xs text-[#71717A]">
+                                Belum ada penayangan film ini di kota{' '}
+                                <strong>{selectedCity}</strong> pada tanggal
+                                terpilih. Silakan coba pilih kota atau tanggal
+                                lain.
                             </p>
                         </div>
                     ) : (
                         <div className="space-y-4">
                             {cinemas.map((cinema) => (
-                                <Card key={cinema.id} className="border-[#27272A] bg-[#111114] rounded-xl overflow-hidden shadow-none">
-                                    <CardContent className="p-5 space-y-5">
+                                <Card
+                                    key={cinema.id}
+                                    className="overflow-hidden rounded-xl border-[#27272A] bg-[#111114] shadow-none"
+                                >
+                                    <CardContent className="space-y-5 p-5">
                                         {/* Cinema Header */}
                                         <div className="border-b border-[#27272A] pb-3">
                                             <div className="flex items-center justify-between">
-                                                <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                                                <h3 className="flex items-center gap-2 text-base font-semibold text-white">
                                                     <MapPin className="size-3.5 text-red-500" />
                                                     {cinema.name}
                                                 </h3>
-                                                <span className="text-xs text-[#71717A]">{cinema.city}</span>
+                                                <span className="text-xs text-[#71717A]">
+                                                    {cinema.city}
+                                                </span>
                                             </div>
-                                            <p className="mt-0.5 text-xs text-[#71717A]">{cinema.address}</p>
+                                            <p className="mt-0.5 text-xs text-[#71717A]">
+                                                {cinema.address}
+                                            </p>
                                         </div>
 
                                         {/* Studios list inside Cinema */}
                                         <div className="space-y-4">
                                             {cinema.studios.map((studio) => (
-                                                <div key={studio.id} className="space-y-2.5">
+                                                <div
+                                                    key={studio.id}
+                                                    className="space-y-2.5"
+                                                >
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-2">
-                                                            <span className="font-medium text-xs text-zinc-200">
+                                                            <span className="text-xs font-medium text-zinc-200">
                                                                 {studio.name}
                                                             </span>
-                                                            {getStudioBadge(studio.studio_type || studio.type || 'regular')}
+                                                            {getStudioBadge(
+                                                                studio.studio_type ||
+                                                                    studio.type ||
+                                                                    'regular',
+                                                            )}
                                                         </div>
                                                         <span className="text-xs text-[#A1A1AA]">
-                                                            Mulai Rp {((studio.showtimes[0]?.base_price || 45000)).toLocaleString('id-ID')}
+                                                            Mulai Rp{' '}
+                                                            {(
+                                                                studio
+                                                                    .showtimes[0]
+                                                                    ?.base_price ||
+                                                                45000
+                                                            ).toLocaleString(
+                                                                'id-ID',
+                                                            )}
                                                         </span>
                                                     </div>
 
                                                     {/* Showtime Buttons */}
                                                     <div className="flex flex-wrap gap-2.5">
-                                                        {studio.showtimes.map((st) => {
-                                                            const totalSeats = studio.total_seats || 60;
-                                                            const remainingSeats = Math.max(0, totalSeats - st.booked_seats_count);
+                                                        {studio.showtimes.map(
+                                                            (st) => {
+                                                                const totalSeats =
+                                                                    studio.total_seats ||
+                                                                    60;
+                                                                const remainingSeats =
+                                                                    Math.max(
+                                                                        0,
+                                                                        totalSeats -
+                                                                            st.booked_seats_count,
+                                                                    );
 
-                                                            return (
-                                                                <Link
-                                                                    key={st.id}
-                                                                    href={`/booking/${st.id}/seats`}
-                                                                    className="group"
-                                                                >
-                                                                    <div className="flex flex-col items-center justify-center rounded-lg border border-[#27272A] bg-[#18181B] px-3.5 py-2 transition-colors group-hover:border-[#E50914] group-hover:bg-zinc-800">
-                                                                        <span className="font-mono text-sm font-semibold text-white group-hover:text-red-400">
-                                                                            {st.start_time.substring(0, 5)}
-                                                                        </span>
-                                                                        <span className="text-[10px] text-[#71717A] mt-0.5">
-                                                                            {remainingSeats} kursi
-                                                                        </span>
-                                                                    </div>
-                                                                </Link>
-                                                            );
-                                                        })}
+                                                                return (
+                                                                    <Link
+                                                                        key={
+                                                                            st.id
+                                                                        }
+                                                                        href={`/booking/${st.id}/seats`}
+                                                                        className="group"
+                                                                    >
+                                                                        <div className="flex flex-col items-center justify-center rounded-lg border border-[#27272A] bg-[#18181B] px-3.5 py-2 transition-colors group-hover:border-[#E50914] group-hover:bg-zinc-800">
+                                                                            <span className="font-mono text-sm font-semibold text-white group-hover:text-red-400">
+                                                                                {st.start_time.substring(
+                                                                                    0,
+                                                                                    5,
+                                                                                )}
+                                                                            </span>
+                                                                            <span className="mt-0.5 text-[10px] text-[#71717A]">
+                                                                                {
+                                                                                    remainingSeats
+                                                                                }{' '}
+                                                                                kursi
+                                                                            </span>
+                                                                        </div>
+                                                                    </Link>
+                                                                );
+                                                            },
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -372,24 +481,24 @@ export default function MovieDetail({
             {/* Cinematic Theater Trailer Modal */}
             {embedUrl && (
                 <Dialog open={trailerOpen} onOpenChange={setTrailerOpen}>
-                    <DialogContent className="border-[#27272A] bg-[#0E0E11] p-0 overflow-hidden sm:max-w-4xl lg:max-w-5xl rounded-2xl shadow-2xl shadow-red-950/20">
+                    <DialogContent className="overflow-hidden rounded-2xl border-[#27272A] bg-[#0E0E11] p-0 shadow-2xl shadow-red-950/20 sm:max-w-4xl lg:max-w-5xl">
                         {/* Cinema Header */}
-                        <div className="flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-[#141418] via-[#18181D] to-[#141418] border-b border-[#27272A] pr-14">
-                            <div className="flex items-center gap-3 min-w-0">
-                                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#E50914]/15 border border-[#E50914]/30 text-[#E50914] text-[10px] font-bold tracking-wider uppercase shrink-0">
-                                    <span className="size-1.5 rounded-full bg-[#E50914] animate-pulse" />
+                        <div className="flex items-center justify-between border-b border-[#27272A] bg-gradient-to-r from-[#141418] via-[#18181D] to-[#141418] px-5 py-3.5 pr-14">
+                            <div className="flex min-w-0 items-center gap-3">
+                                <span className="flex shrink-0 items-center gap-1.5 rounded-md border border-[#E50914]/30 bg-[#E50914]/15 px-2.5 py-1 text-[10px] font-bold tracking-wider text-[#E50914] uppercase">
+                                    <span className="size-1.5 animate-pulse rounded-full bg-[#E50914]" />
                                     Official Trailer
                                 </span>
-                                <DialogTitle className="text-sm sm:text-base font-bold text-white truncate">
+                                <DialogTitle className="truncate text-sm font-bold text-white sm:text-base">
                                     {movie.title}
                                 </DialogTitle>
                                 {movie.rating_age && (
-                                    <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-zinc-800 text-[10px] font-semibold text-zinc-300 border border-zinc-700 shrink-0">
+                                    <span className="hidden shrink-0 rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[10px] font-semibold text-zinc-300 sm:inline-block">
                                         {movie.rating_age}
                                     </span>
                                 )}
                                 {movie.duration_minutes && (
-                                    <span className="hidden sm:inline-block text-xs text-zinc-400 shrink-0">
+                                    <span className="hidden shrink-0 text-xs text-zinc-400 sm:inline-block">
                                         {movie.duration_minutes} Menit
                                     </span>
                                 )}
@@ -397,7 +506,7 @@ export default function MovieDetail({
                         </div>
 
                         {/* Edge-to-Edge Theater Video Player */}
-                        <div className="aspect-video w-full bg-black relative flex items-center justify-center">
+                        <div className="relative flex aspect-video w-full items-center justify-center bg-black">
                             <iframe
                                 src={trailerOpen ? embedUrl : ''}
                                 title={`Trailer ${movie.title}`}
@@ -408,14 +517,16 @@ export default function MovieDetail({
                         </div>
 
                         {/* Cinema Lounge Footer */}
-                        <div className="px-5 py-3.5 bg-[#111114] border-t border-[#27272A] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-400">
-                            <div className="flex items-center gap-2 min-w-0">
-                                <Film className="size-3.5 text-zinc-400 shrink-0" />
+                        <div className="flex flex-col justify-between gap-3 border-t border-[#27272A] bg-[#111114] px-5 py-3.5 text-xs text-zinc-400 sm:flex-row sm:items-center">
+                            <div className="flex min-w-0 items-center gap-2">
+                                <Film className="size-3.5 shrink-0 text-zinc-400" />
                                 <span className="truncate">
-                                    {movie.genres?.map((g) => g.name).join(' • ') || 'Bioskop Indonesia'}
+                                    {movie.genres
+                                        ?.map((g) => g.name)
+                                        .join(' • ') || 'Bioskop Indonesia'}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2.5 shrink-0">
+                            <div className="flex shrink-0 items-center gap-2.5">
                                 <Button
                                     type="button"
                                     variant="ghost"
@@ -430,12 +541,17 @@ export default function MovieDetail({
                                     size="sm"
                                     onClick={() => {
                                         setTrailerOpen(false);
-                                        const scheduleSection = document.getElementById('jadwal-tayang');
+                                        const scheduleSection =
+                                            document.getElementById(
+                                                'jadwal-tayang',
+                                            );
                                         if (scheduleSection) {
-                                            scheduleSection.scrollIntoView({ behavior: 'smooth' });
+                                            scheduleSection.scrollIntoView({
+                                                behavior: 'smooth',
+                                            });
                                         }
                                     }}
-                                    className="h-8 bg-[#E50914] hover:bg-red-700 text-white text-xs font-medium px-4 rounded-lg shadow-md"
+                                    className="h-8 rounded-lg bg-[#E50914] px-4 text-xs font-medium text-white shadow-md hover:bg-red-700"
                                 >
                                     Pilih Jadwal & Pesan
                                 </Button>

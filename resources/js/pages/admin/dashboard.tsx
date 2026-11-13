@@ -22,7 +22,13 @@ import {
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AdminLayout from '@/layouts/admin-layout';
 
 interface Props {
@@ -120,13 +126,29 @@ export default function AdminDashboard({
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'paid':
-                return <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-white border border-zinc-700">Lunas</span>;
+                return (
+                    <span className="rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-white">
+                        Lunas
+                    </span>
+                );
             case 'pending':
-                return <span className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-zinc-300 border border-zinc-800">Menunggu</span>;
+                return (
+                    <span className="rounded border border-zinc-800 bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        Menunggu
+                    </span>
+                );
             case 'cancelled':
-                return <span className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-[#71717A] border border-zinc-800">Dibatalkan</span>;
+                return (
+                    <span className="rounded border border-zinc-800 bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-[#71717A]">
+                        Dibatalkan
+                    </span>
+                );
             default:
-                return <span className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-[#71717A] border border-zinc-800">{status}</span>;
+                return (
+                    <span className="rounded border border-zinc-800 bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-[#71717A]">
+                        {status}
+                    </span>
+                );
         }
     };
 
@@ -136,19 +158,20 @@ export default function AdminDashboard({
 
             <div className="space-y-6">
                 {/* Header Welcome */}
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-[#27272A] pb-5">
+                <div className="flex flex-col gap-2 border-b border-[#27272A] pb-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                        <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                             Executive Dashboard
                         </h1>
-                        <p className="text-xs text-[#A1A1AA] mt-0.5">
-                            Ringkasan performa penjualan tiket, jadwal studio, dan aktivitas bioskop.
+                        <p className="mt-0.5 text-xs text-[#A1A1AA]">
+                            Ringkasan performa penjualan tiket, jadwal studio,
+                            dan aktivitas bioskop.
                         </p>
                     </div>
 
                     <div className="flex items-center gap-2">
                         <Link href="/admin/scanner">
-                            <Button className="h-8.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg">
+                            <Button className="h-8.5 rounded-lg bg-blue-600 text-xs font-medium text-white hover:bg-blue-700">
                                 <Sparkles className="mr-1.5 size-3.5" />
                                 Scanner Pintu Masuk
                             </Button>
@@ -161,9 +184,12 @@ export default function AdminDashboard({
                     {metricCards.map((card, idx) => {
                         const Icon = card.icon;
                         return (
-                            <Card key={idx} className="border-[#27272A] bg-[#18181B] rounded-xl shadow-none">
+                            <Card
+                                key={idx}
+                                className="rounded-xl border-[#27272A] bg-[#18181B] shadow-none"
+                            >
                                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                    <CardTitle className="text-xs font-medium uppercase tracking-wider text-[#71717A]">
+                                    <CardTitle className="text-xs font-medium tracking-wider text-[#71717A] uppercase">
                                         {card.title}
                                     </CardTitle>
                                     <div className="rounded-lg border border-[#27272A] bg-[#111114] p-1.5 text-zinc-400">
@@ -171,7 +197,7 @@ export default function AdminDashboard({
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-xl sm:text-2xl font-bold tracking-tight text-white font-mono">
+                                    <div className="font-mono text-xl font-bold tracking-tight text-white sm:text-2xl">
                                         {card.value}
                                     </div>
                                     <p className="mt-1 text-xs text-[#71717A]">
@@ -186,7 +212,7 @@ export default function AdminDashboard({
                 {/* Charts & Popular Movies Section */}
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Revenue Trend Chart (2 columns) */}
-                    <Card className="border-[#27272A] bg-[#18181B] rounded-xl shadow-none lg:col-span-2">
+                    <Card className="rounded-xl border-[#27272A] bg-[#18181B] shadow-none lg:col-span-2">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <div>
                                 <CardTitle className="text-sm font-semibold text-white">
@@ -200,14 +226,40 @@ export default function AdminDashboard({
                         <CardContent className="pt-2">
                             <div className="h-[260px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                    <AreaChart
+                                        data={chartData}
+                                        margin={{
+                                            top: 10,
+                                            right: 10,
+                                            left: 0,
+                                            bottom: 0,
+                                        }}
+                                    >
                                         <defs>
-                                            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#E50914" stopOpacity={0.25} />
-                                                <stop offset="95%" stopColor="#E50914" stopOpacity={0} />
+                                            <linearGradient
+                                                id="colorRevenue"
+                                                x1="0"
+                                                y1="0"
+                                                x2="0"
+                                                y2="1"
+                                            >
+                                                <stop
+                                                    offset="5%"
+                                                    stopColor="#E50914"
+                                                    stopOpacity={0.25}
+                                                />
+                                                <stop
+                                                    offset="95%"
+                                                    stopColor="#E50914"
+                                                    stopOpacity={0}
+                                                />
                                             </linearGradient>
                                         </defs>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#27272A" vertical={false} />
+                                        <CartesianGrid
+                                            strokeDasharray="3 3"
+                                            stroke="#27272A"
+                                            vertical={false}
+                                        />
                                         <XAxis
                                             dataKey="date"
                                             stroke="#71717A"
@@ -220,7 +272,9 @@ export default function AdminDashboard({
                                             fontSize={11}
                                             tickLine={false}
                                             axisLine={false}
-                                            tickFormatter={(val) => `Rp ${val / 1000}k`}
+                                            tickFormatter={(val) =>
+                                                `Rp ${val / 1000}k`
+                                            }
                                         />
                                         <Tooltip
                                             contentStyle={{
@@ -230,7 +284,12 @@ export default function AdminDashboard({
                                                 color: '#FAFAFA',
                                                 fontSize: '12px',
                                             }}
-                                            formatter={(value: any) => [formatCurrency(Number(value) || 0), 'Pendapatan']}
+                                            formatter={(value: any) => [
+                                                formatCurrency(
+                                                    Number(value) || 0,
+                                                ),
+                                                'Pendapatan',
+                                            ]}
                                         />
                                         <Area
                                             type="monotone"
@@ -247,7 +306,7 @@ export default function AdminDashboard({
                     </Card>
 
                     {/* Popular Movies Widget */}
-                    <Card className="border-[#27272A] bg-[#18181B] rounded-xl shadow-none">
+                    <Card className="rounded-xl border-[#27272A] bg-[#18181B] shadow-none">
                         <CardHeader className="flex flex-row items-center justify-between pb-3">
                             <div>
                                 <CardTitle className="text-sm font-semibold text-white">
@@ -261,10 +320,24 @@ export default function AdminDashboard({
                         </CardHeader>
                         <CardContent className="space-y-3">
                             {popularMovies.map((movie, idx) => (
-                                <div key={movie.id} className="flex items-center gap-3">
-                                    <div className="relative h-12 w-9 shrink-0 overflow-hidden rounded bg-[#111114] border border-[#27272A]">
+                                <div
+                                    key={movie.id}
+                                    className="flex items-center gap-3"
+                                >
+                                    <div className="relative h-12 w-9 shrink-0 overflow-hidden rounded border border-[#27272A] bg-[#111114]">
                                         <img
-                                            src={movie.poster_path ? (movie.poster_path.startsWith('http') || movie.poster_path.startsWith('/') ? movie.poster_path : `/storage/${movie.poster_path}`) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'}
+                                            src={
+                                                movie.poster_path
+                                                    ? movie.poster_path.startsWith(
+                                                          'http',
+                                                      ) ||
+                                                      movie.poster_path.startsWith(
+                                                          '/',
+                                                      )
+                                                        ? movie.poster_path
+                                                        : `/storage/${movie.poster_path}`
+                                                    : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
+                                            }
                                             alt={movie.title}
                                             className="h-full w-full object-cover"
                                         />
@@ -279,7 +352,9 @@ export default function AdminDashboard({
                                         <div className="flex items-center gap-2 text-[11px] text-[#71717A]">
                                             <span>{movie.rating_age}</span>
                                             <span>•</span>
-                                            <span>{movie.total_sold} tiket</span>
+                                            <span>
+                                                {movie.total_sold} tiket
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +364,7 @@ export default function AdminDashboard({
                 </div>
 
                 {/* Recent Transactions Table */}
-                <Card className="border-[#27272A] bg-[#18181B] rounded-xl shadow-none">
+                <Card className="rounded-xl border-[#27272A] bg-[#18181B] shadow-none">
                     <CardHeader className="flex flex-row items-center justify-between pb-3">
                         <div>
                             <CardTitle className="text-sm font-semibold text-white">
@@ -300,7 +375,11 @@ export default function AdminDashboard({
                             </CardDescription>
                         </div>
                         <Link href="/admin/bookings">
-                            <Button variant="ghost" size="sm" className="h-7 text-xs text-[#A1A1AA] hover:text-white">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs text-[#A1A1AA] hover:text-white"
+                            >
                                 Semua
                                 <ArrowUpRight className="ml-1 size-3" />
                             </Button>
@@ -311,46 +390,72 @@ export default function AdminDashboard({
                             <table className="w-full text-left text-xs text-[#A1A1AA]">
                                 <thead className="border-b border-[#27272A] text-[11px] text-[#71717A] uppercase">
                                     <tr>
-                                        <th className="py-2.5 px-3">Kode Booking</th>
-                                        <th className="py-2.5 px-3">Pelanggan</th>
-                                        <th className="py-2.5 px-3">Film & Bioskop</th>
-                                        <th className="py-2.5 px-3">Studio</th>
-                                        <th className="py-2.5 px-3">Total</th>
-                                        <th className="py-2.5 px-3">Status</th>
+                                        <th className="px-3 py-2.5">
+                                            Kode Booking
+                                        </th>
+                                        <th className="px-3 py-2.5">
+                                            Pelanggan
+                                        </th>
+                                        <th className="px-3 py-2.5">
+                                            Film & Bioskop
+                                        </th>
+                                        <th className="px-3 py-2.5">Studio</th>
+                                        <th className="px-3 py-2.5">Total</th>
+                                        <th className="px-3 py-2.5">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#27272A]">
                                     {recentBookings.length === 0 ? (
                                         <tr>
-                                            <td colSpan={6} className="py-6 text-center text-[#71717A]">
+                                            <td
+                                                colSpan={6}
+                                                className="py-6 text-center text-[#71717A]"
+                                            >
                                                 Belum ada transaksi pemesanan.
                                             </td>
                                         </tr>
                                     ) : (
                                         recentBookings.map((b) => (
-                                            <tr key={b.id} className="hover:bg-zinc-800/30 transition-colors">
-                                                <td className="py-3 px-3 font-mono font-medium text-white">
+                                            <tr
+                                                key={b.id}
+                                                className="transition-colors hover:bg-zinc-800/30"
+                                            >
+                                                <td className="px-3 py-3 font-mono font-medium text-white">
                                                     {b.booking_code}
                                                 </td>
-                                                <td className="py-3 px-3">
-                                                    <div className="font-medium text-zinc-100">{b.user.name}</div>
-                                                    <div className="text-[11px] text-[#71717A]">{b.user.email}</div>
+                                                <td className="px-3 py-3">
+                                                    <div className="font-medium text-zinc-100">
+                                                        {b.user.name}
+                                                    </div>
+                                                    <div className="text-[11px] text-[#71717A]">
+                                                        {b.user.email}
+                                                    </div>
                                                 </td>
-                                                <td className="py-3 px-3">
+                                                <td className="px-3 py-3">
                                                     <div className="font-medium text-zinc-100">
                                                         {b.showtime.movie.title}
                                                     </div>
                                                     <div className="text-[11px] text-[#71717A]">
-                                                        {b.showtime.studio.cinema.name}
+                                                        {
+                                                            b.showtime.studio
+                                                                .cinema.name
+                                                        }
                                                     </div>
                                                 </td>
-                                                <td className="py-3 px-3 text-zinc-400">
-                                                    {b.showtime.studio.name} ({b.showtime.start_time.substring(0, 5)})
+                                                <td className="px-3 py-3 text-zinc-400">
+                                                    {b.showtime.studio.name} (
+                                                    {b.showtime.start_time.substring(
+                                                        0,
+                                                        5,
+                                                    )}
+                                                    )
                                                 </td>
-                                                <td className="py-3 px-3 font-semibold text-white font-mono">
-                                                    {formatCurrency(b.total_amount)}
+                                                <td className="px-3 py-3 font-mono font-semibold text-white">
+                                                    {formatCurrency(
+                                                        b.total_amount,
+                                                    )}
                                                 </td>
-                                                <td className="py-3 px-3">
+                                                <td className="px-3 py-3">
                                                     {getStatusBadge(b.status)}
                                                 </td>
                                             </tr>

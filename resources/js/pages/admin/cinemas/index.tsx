@@ -73,7 +73,11 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
     };
 
     const handleDelete = (c: Cinema) => {
-        if (confirm(`Hapus bioskop '${c.name}'? Seluruh studio di dalamnya juga akan terhapus.`)) {
+        if (
+            confirm(
+                `Hapus bioskop '${c.name}'? Seluruh studio di dalamnya juga akan terhapus.`,
+            )
+        ) {
             router.delete(`/admin/cinemas/${c.id}`);
         }
     };
@@ -89,11 +93,15 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
                             Manajemen Lokasi Bioskop
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Kelola cabang bioskop CinePass di berbagai kota dan wilayah.
+                            Kelola cabang bioskop CinePass di berbagai kota dan
+                            wilayah.
                         </p>
                     </div>
 
-                    <Button onClick={openCreateModal} className="bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                    <Button
+                        onClick={openCreateModal}
+                        className="bg-blue-600 font-medium text-white hover:bg-blue-700"
+                    >
                         <Plus className="mr-1.5 size-4" />
                         Tambah Bioskop Baru
                     </Button>
@@ -101,24 +109,35 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {cinemas.data.map((c) => (
-                        <Card key={c.id} className="border-zinc-800/80 bg-zinc-900/40 backdrop-blur-sm">
+                        <Card
+                            key={c.id}
+                            className="border-zinc-800/80 bg-zinc-900/40 backdrop-blur-sm"
+                        >
                             <CardContent className="p-5">
                                 <div className="flex items-start justify-between">
                                     <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2.5 text-red-500">
                                         <Building2 className="size-5" />
                                     </div>
-                                    <Badge className={c.is_active ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-800 text-zinc-400'}>
+                                    <Badge
+                                        className={
+                                            c.is_active
+                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                                : 'bg-zinc-800 text-zinc-400'
+                                        }
+                                    >
                                         {c.is_active ? 'Aktif' : 'Nonaktif'}
                                     </Badge>
                                 </div>
 
                                 <div className="mt-4">
-                                    <h3 className="text-base font-semibold text-white">{c.name}</h3>
+                                    <h3 className="text-base font-semibold text-white">
+                                        {c.name}
+                                    </h3>
                                     <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-400">
-                                        <MapPin className="size-3.5 text-red-400 shrink-0" />
+                                        <MapPin className="size-3.5 shrink-0 text-red-400" />
                                         <span>{c.city}</span>
                                     </div>
-                                    <p className="mt-1 text-xs text-zinc-500 line-clamp-2">
+                                    <p className="mt-1 line-clamp-2 text-xs text-zinc-500">
                                         {c.address}
                                     </p>
                                     {c.phone && (
@@ -162,21 +181,33 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <DialogContent className="border-zinc-800 bg-zinc-950 text-white sm:max-w-md">
                         <DialogHeader>
-                            <DialogTitle>{editingCinema ? 'Edit Bioskop' : 'Tambah Bioskop Baru'}</DialogTitle>
+                            <DialogTitle>
+                                {editingCinema
+                                    ? 'Edit Bioskop'
+                                    : 'Tambah Bioskop Baru'}
+                            </DialogTitle>
                             <DialogDescription className="text-zinc-400">
-                                Masukkan nama cabang, kota, dan kontak operasional.
+                                Masukkan nama cabang, kota, dan kontak
+                                operasional.
                             </DialogDescription>
                         </DialogHeader>
 
-                        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+                        <form
+                            onSubmit={handleSubmit}
+                            className="space-y-4 pt-2"
+                        >
                             <div className="grid gap-2">
-                                <Label htmlFor="cinema_name">Nama Bioskop *</Label>
+                                <Label htmlFor="cinema_name">
+                                    Nama Bioskop *
+                                </Label>
                                 <Input
                                     id="cinema_name"
                                     value={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('name', e.target.value)
+                                    }
                                     placeholder="Contoh: CinePass Grand Mall"
-                                    className="bg-zinc-900 border-zinc-800"
+                                    className="border-zinc-800 bg-zinc-900"
                                     required
                                 />
                             </div>
@@ -186,21 +217,27 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
                                 <Input
                                     id="city"
                                     value={data.city}
-                                    onChange={(e) => setData('city', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('city', e.target.value)
+                                    }
                                     placeholder="Contoh: Jakarta Pusat"
-                                    className="bg-zinc-900 border-zinc-800"
+                                    className="border-zinc-800 bg-zinc-900"
                                     required
                                 />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="address">Alamat Lengkap *</Label>
+                                <Label htmlFor="address">
+                                    Alamat Lengkap *
+                                </Label>
                                 <Input
                                     id="address"
                                     value={data.address}
-                                    onChange={(e) => setData('address', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('address', e.target.value)
+                                    }
                                     placeholder="Jl. Thamrin No. 1..."
-                                    className="bg-zinc-900 border-zinc-800"
+                                    className="border-zinc-800 bg-zinc-900"
                                     required
                                 />
                             </div>
@@ -210,9 +247,11 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
                                 <Input
                                     id="phone"
                                     value={data.phone}
-                                    onChange={(e) => setData('phone', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('phone', e.target.value)
+                                    }
                                     placeholder="021-xxxxxx"
-                                    className="bg-zinc-900 border-zinc-800"
+                                    className="border-zinc-800 bg-zinc-900"
                                 />
                             </div>
 
@@ -225,7 +264,11 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
                                 >
                                     Batal
                                 </Button>
-                                <Button type="submit" disabled={processing} className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium">
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="bg-emerald-600 font-medium text-white hover:bg-emerald-700"
+                                >
                                     Simpan
                                 </Button>
                             </DialogFooter>
@@ -236,4 +279,3 @@ export default function AdminCinemasIndex({ cinemas }: Props) {
         </AdminLayout>
     );
 }
-

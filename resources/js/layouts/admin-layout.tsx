@@ -45,7 +45,12 @@ export default function AdminLayout({ children }: PropsWithChildren) {
     }, [flash]);
 
     const navItems = [
-        { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+        {
+            label: 'Dashboard',
+            href: '/admin',
+            icon: LayoutDashboard,
+            exact: true,
+        },
         { label: 'Katalog Film', href: '/admin/movies', icon: Film },
         { label: 'Bioskop', href: '/admin/cinemas', icon: Clapperboard },
         { label: 'Studio & Kursi', href: '/admin/studios', icon: Grid3X3 },
@@ -58,7 +63,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         { label: 'Pengaturan', href: '/admin/settings', icon: Settings },
     ];
 
-    const isLinkActive = (item: typeof navItems[0]) => {
+    const isLinkActive = (item: (typeof navItems)[0]) => {
         if (item.exact) {
             return currentUrl === item.href;
         }
@@ -91,7 +96,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                                     href={item.href}
                                     className={`flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                                         active
-                                            ? 'bg-[#E50914] text-white font-semibold'
+                                            ? 'bg-[#E50914] font-semibold text-white'
                                             : 'text-[#A1A1AA] hover:bg-[#18181B] hover:text-white'
                                     }`}
                                 >
@@ -105,8 +110,8 @@ export default function AdminLayout({ children }: PropsWithChildren) {
 
                 {/* Footer User Info */}
                 <div className="border-t border-[#27272A] p-3.5">
-                    <div className="flex items-center gap-3 rounded-lg bg-[#18181B] border border-[#27272A] p-2.5">
-                        <div className="flex size-7 items-center justify-center rounded bg-[#E50914] font-bold text-white text-xs">
+                    <div className="flex items-center gap-3 rounded-lg border border-[#27272A] bg-[#18181B] p-2.5">
+                        <div className="flex size-7 items-center justify-center rounded bg-[#E50914] text-xs font-bold text-white">
                             {auth.user.name.charAt(0)}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -143,7 +148,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-8 border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg"
+                                className="h-8 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:bg-zinc-800 hover:text-white"
                             >
                                 <Compass className="mr-1.5 size-3.5 text-zinc-400" />
                                 Situs Publik
@@ -153,9 +158,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 p-6 md:p-8">
-                    {children}
-                </main>
+                <main className="flex-1 p-6 md:p-8">{children}</main>
             </div>
         </div>
     );

@@ -33,7 +33,8 @@ export default function HeroSlider({ movies }: Props) {
 
     const getEmbedUrl = (url: string | null) => {
         if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const regExp =
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/;
         const match = url.match(regExp);
         return match && match[2].length === 11
             ? `https://www.youtube.com/embed/${match[2]}?autoplay=1`
@@ -47,7 +48,7 @@ export default function HeroSlider({ movies }: Props) {
                 <img
                     src={currentMovie.banner_path || currentMovie.poster_path}
                     alt={currentMovie.title}
-                    className="h-full w-full object-cover object-center filter brightness-[0.4] transition-all duration-700 scale-100"
+                    className="h-full w-full scale-100 object-cover object-center brightness-[0.4] filter transition-all duration-700"
                 />
                 {/* Cinema Gradient overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/60 to-transparent" />
@@ -55,14 +56,14 @@ export default function HeroSlider({ movies }: Props) {
             </div>
 
             {/* Content Container */}
-            <div className="relative mx-auto flex h-full max-w-[1600px] w-full flex-col justify-end px-4 pb-14 sm:px-6 lg:px-8 xl:px-12">
+            <div className="relative mx-auto flex h-full w-full max-w-[1600px] flex-col justify-end px-4 pb-14 sm:px-6 lg:px-8 xl:px-12">
                 <div className="max-w-2xl space-y-4">
                     {/* Badges */}
                     <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded bg-[#E50914] px-2.5 py-0.5 text-xs font-semibold text-white">
                             Pilihan Utama
                         </span>
-                        <span className="rounded bg-zinc-900/90 px-2 py-0.5 text-xs font-medium text-zinc-300 border border-zinc-800">
+                        <span className="rounded border border-zinc-800 bg-zinc-900/90 px-2 py-0.5 text-xs font-medium text-zinc-300">
                             {currentMovie.rating_age}
                         </span>
                         <div className="flex items-center gap-1 text-xs text-zinc-400">
@@ -81,7 +82,7 @@ export default function HeroSlider({ movies }: Props) {
                         {currentMovie.genres?.map((g) => (
                             <span
                                 key={g.id}
-                                className="rounded bg-zinc-900/80 px-2.5 py-1 text-xs font-medium text-zinc-400 border border-zinc-800"
+                                className="rounded border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-xs font-medium text-zinc-400"
                             >
                                 {g.name}
                             </span>
@@ -89,7 +90,7 @@ export default function HeroSlider({ movies }: Props) {
                     </div>
 
                     {/* Synopsis */}
-                    <p className="line-clamp-2 sm:line-clamp-3 text-sm text-[#A1A1AA] leading-relaxed max-w-xl">
+                    <p className="line-clamp-2 max-w-xl text-sm leading-relaxed text-[#A1A1AA] sm:line-clamp-3">
                         {currentMovie.synopsis}
                     </p>
 
@@ -104,7 +105,7 @@ export default function HeroSlider({ movies }: Props) {
                     {/* Action Buttons */}
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                         <Link href={`/movies/${currentMovie.slug}`}>
-                            <Button className="h-10 rounded-lg bg-[#E50914] hover:bg-red-700 text-white font-medium px-6 text-sm">
+                            <Button className="h-10 rounded-lg bg-[#E50914] px-6 text-sm font-medium text-white hover:bg-red-700">
                                 <Ticket className="mr-2 size-4" />
                                 Pesan Tiket
                             </Button>
@@ -113,8 +114,12 @@ export default function HeroSlider({ movies }: Props) {
                         {currentMovie.trailer_url && (
                             <Button
                                 variant="outline"
-                                onClick={() => setTrailerUrl(getEmbedUrl(currentMovie.trailer_url))}
-                                className="h-10 rounded-lg border-zinc-700 bg-zinc-900/80 text-zinc-200 hover:bg-zinc-800 hover:text-white px-5 text-sm"
+                                onClick={() =>
+                                    setTrailerUrl(
+                                        getEmbedUrl(currentMovie.trailer_url),
+                                    )
+                                }
+                                className="h-10 rounded-lg border-zinc-700 bg-zinc-900/80 px-5 text-sm text-zinc-200 hover:bg-zinc-800 hover:text-white"
                             >
                                 <Play className="mr-2 size-3.5 fill-current text-zinc-300" />
                                 Tonton Trailer
@@ -125,11 +130,17 @@ export default function HeroSlider({ movies }: Props) {
 
                 {/* Slider Controls */}
                 {movies.length > 1 && (
-                    <div className="absolute bottom-8 right-4 flex items-center gap-3 sm:right-8">
+                    <div className="absolute right-4 bottom-8 flex items-center gap-3 sm:right-8">
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => setCurrentIndex((prev) => (prev - 1 + movies.length) % movies.length)}
+                            onClick={() =>
+                                setCurrentIndex(
+                                    (prev) =>
+                                        (prev - 1 + movies.length) %
+                                        movies.length,
+                                )
+                            }
                             className="size-8 rounded-lg border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:bg-zinc-800 hover:text-white"
                         >
                             <ChevronLeft className="size-4" />
@@ -142,7 +153,9 @@ export default function HeroSlider({ movies }: Props) {
                                     type="button"
                                     onClick={() => setCurrentIndex(idx)}
                                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                                        currentIndex === idx ? 'w-6 bg-[#E50914]' : 'w-2 bg-zinc-700 hover:bg-zinc-500'
+                                        currentIndex === idx
+                                            ? 'w-6 bg-[#E50914]'
+                                            : 'w-2 bg-zinc-700 hover:bg-zinc-500'
                                     }`}
                                 />
                             ))}
@@ -151,7 +164,11 @@ export default function HeroSlider({ movies }: Props) {
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => setCurrentIndex((prev) => (prev + 1) % movies.length)}
+                            onClick={() =>
+                                setCurrentIndex(
+                                    (prev) => (prev + 1) % movies.length,
+                                )
+                            }
                             className="size-8 rounded-lg border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:bg-zinc-800 hover:text-white"
                         >
                             <ChevronRight className="size-4" />
@@ -162,11 +179,14 @@ export default function HeroSlider({ movies }: Props) {
 
             {/* Trailer Modal */}
             {trailerUrl && (
-                <Dialog open={!!trailerUrl} onOpenChange={() => setTrailerUrl(null)}>
-                    <DialogContent className="border-[#27272A] bg-[#111114] p-0 overflow-hidden sm:max-w-3xl">
+                <Dialog
+                    open={!!trailerUrl}
+                    onOpenChange={() => setTrailerUrl(null)}
+                >
+                    <DialogContent className="overflow-hidden border-[#27272A] bg-[#111114] p-0 sm:max-w-3xl">
                         <DialogHeader className="p-4 pb-0">
-                            <DialogTitle className="text-sm font-semibold text-white flex items-center gap-2">
-                                <Play className="size-4 text-[#E50914] fill-current" />
+                            <DialogTitle className="flex items-center gap-2 text-sm font-semibold text-white">
+                                <Play className="size-4 fill-current text-[#E50914]" />
                                 Trailer: {currentMovie.title}
                             </DialogTitle>
                         </DialogHeader>

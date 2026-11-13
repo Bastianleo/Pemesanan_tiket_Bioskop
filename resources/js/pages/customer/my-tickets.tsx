@@ -14,7 +14,7 @@ import {
     History,
     Building2,
     Film,
-    ArrowLeft
+    ArrowLeft,
 } from 'lucide-react';
 import { Booking, Movie, Ticket as TicketType } from '@/types/cinema';
 
@@ -37,33 +37,36 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
         <CinemaLayout>
             <Head title="Tiket Bioskop Saya - CinePass Cinema" />
 
-            <div className="min-h-screen bg-[#09090B] text-[#FAFAFA] py-8 lg:py-10 overflow-x-clip">
-                <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 space-y-8">
-                    
+            <div className="min-h-screen overflow-x-clip bg-[#09090B] py-8 text-[#FAFAFA] lg:py-10">
+                <div className="mx-auto w-full max-w-[1600px] space-y-8 px-4 sm:px-6 lg:px-8 xl:px-12">
                     {/* Header Banner */}
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-[#27272A] pb-6">
+                    <div className="flex flex-col gap-6 border-b border-[#27272A] pb-6 md:flex-row md:items-center md:justify-between">
                         <div className="space-y-1 text-left">
-                            <span className="text-xs font-medium text-[#71717A] uppercase tracking-wider">
+                            <span className="text-xs font-medium tracking-wider text-[#71717A] uppercase">
                                 Dompet Digital
                             </span>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
                                 Tiket Bioskop Saya
                             </h1>
-                            <p className="text-[#A1A1AA] text-xs sm:text-sm max-w-xl">
-                                Akses tiket aktif Anda untuk langsung scan QR code di depan pintu studio bioskop.
+                            <p className="max-w-xl text-xs text-[#A1A1AA] sm:text-sm">
+                                Akses tiket aktif Anda untuk langsung scan QR
+                                code di depan pintu studio bioskop.
                             </p>
                         </div>
 
-                        <div className="flex items-center gap-2.5 shrink-0">
+                        <div className="flex shrink-0 items-center gap-2.5">
                             <Link href="/dashboard">
-                                <Button variant="outline" className="h-9 border-[#27272A] bg-[#18181B] hover:bg-zinc-800 text-zinc-200 text-xs rounded-lg">
-                                    <ArrowLeft className="size-3.5 mr-1.5" />
+                                <Button
+                                    variant="outline"
+                                    className="h-9 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-200 hover:bg-zinc-800"
+                                >
+                                    <ArrowLeft className="mr-1.5 size-3.5" />
                                     <span>Dashboard</span>
                                 </Button>
                             </Link>
                             <Link href="/movies">
-                                <Button className="h-9 bg-[#E50914] hover:bg-red-700 text-white text-xs font-medium rounded-lg">
-                                    <Film className="size-3.5 mr-1.5" />
+                                <Button className="h-9 rounded-lg bg-[#E50914] text-xs font-medium text-white hover:bg-red-700">
+                                    <Film className="mr-1.5 size-3.5" />
                                     <span>Beli Tiket</span>
                                 </Button>
                             </Link>
@@ -75,10 +78,10 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                         <button
                             type="button"
                             onClick={() => setActiveTab('active')}
-                            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                            className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors ${
                                 activeTab === 'active'
                                     ? 'bg-[#E50914] text-white'
-                                    : 'text-[#A1A1AA] hover:text-white hover:bg-[#18181B]'
+                                    : 'text-[#A1A1AA] hover:bg-[#18181B] hover:text-white'
                             }`}
                         >
                             Tiket Aktif ({activeTickets.length})
@@ -87,10 +90,10 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                         <button
                             type="button"
                             onClick={() => setActiveTab('past')}
-                            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                            className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors ${
                                 activeTab === 'past'
                                     ? 'bg-[#E50914] text-white'
-                                    : 'text-[#A1A1AA] hover:text-white hover:bg-[#18181B]'
+                                    : 'text-[#A1A1AA] hover:bg-[#18181B] hover:text-white'
                             }`}
                         >
                             Riwayat Lampau ({pastTickets.data?.length ?? 0})
@@ -101,62 +104,129 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                     {activeTab === 'active' && (
                         <div>
                             {activeTickets.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
                                     {activeTickets.map((ticket) => (
                                         <Card
                                             key={ticket.id}
-                                            className="bg-[#18181B] border-[#27272A] rounded-xl overflow-hidden flex flex-col justify-between shadow-none hover:border-zinc-700 transition-colors"
+                                            className="flex flex-col justify-between overflow-hidden rounded-xl border-[#27272A] bg-[#18181B] shadow-none transition-colors hover:border-zinc-700"
                                         >
-                                            <CardContent className="p-4 space-y-4 flex-1 flex flex-col justify-between">
+                                            <CardContent className="flex flex-1 flex-col justify-between space-y-4 p-4">
                                                 <div className="space-y-3">
                                                     <div className="flex gap-3">
-                                                        <div className="w-14 h-20 rounded-lg bg-[#111114] overflow-hidden shrink-0 border border-[#27272A]">
+                                                        <div className="h-20 w-14 shrink-0 overflow-hidden rounded-lg border border-[#27272A] bg-[#111114]">
                                                             <img
-                                                                src={ticket.booking?.showtime?.movie?.poster_path ? (ticket.booking.showtime.movie.poster_path.startsWith('http') || ticket.booking.showtime.movie.poster_path.startsWith('/') ? ticket.booking.showtime.movie.poster_path : `/storage/${ticket.booking.showtime.movie.poster_path}`) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'}
-                                                                alt={ticket.booking?.showtime?.movie?.title}
-                                                                className="w-full h-full object-cover"
+                                                                src={
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.poster_path
+                                                                        ? ticket.booking.showtime.movie.poster_path.startsWith(
+                                                                              'http',
+                                                                          ) ||
+                                                                          ticket.booking.showtime.movie.poster_path.startsWith(
+                                                                              '/',
+                                                                          )
+                                                                            ? ticket
+                                                                                  .booking
+                                                                                  .showtime
+                                                                                  .movie
+                                                                                  .poster_path
+                                                                            : `/storage/${ticket.booking.showtime.movie.poster_path}`
+                                                                        : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
+                                                                }
+                                                                alt={
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.title
+                                                                }
+                                                                className="h-full w-full object-cover"
                                                             />
                                                         </div>
 
-                                                        <div className="flex-1 min-w-0 space-y-1 text-left">
+                                                        <div className="min-w-0 flex-1 space-y-1 text-left">
                                                             <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-semibold text-zinc-300">
                                                                 AKTIF
                                                             </span>
-                                                            <h3 className="font-semibold text-white text-sm truncate">
-                                                                {ticket.booking?.showtime?.movie?.title}
+                                                            <h3 className="truncate text-sm font-semibold text-white">
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.title
+                                                                }
                                                             </h3>
-                                                            <p className="text-xs text-[#A1A1AA] truncate">
-                                                                {ticket.booking?.showtime?.cinema?.name}
+                                                            <p className="truncate text-xs text-[#A1A1AA]">
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.cinema
+                                                                        ?.name
+                                                                }
                                                             </p>
                                                             <p className="text-xs text-zinc-400">
-                                                                {ticket.booking?.showtime?.studio?.name}
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.studio
+                                                                        ?.name
+                                                                }
                                                             </p>
                                                         </div>
                                                     </div>
 
-                                                    <div className="bg-[#111114] rounded-lg p-3 border border-[#27272A] flex items-center justify-between text-xs">
+                                                    <div className="flex items-center justify-between rounded-lg border border-[#27272A] bg-[#111114] p-3 text-xs">
                                                         <div className="text-left">
-                                                            <span className="text-[#71717A] text-[10px] uppercase font-medium block">
+                                                            <span className="block text-[10px] font-medium text-[#71717A] uppercase">
                                                                 Jadwal
                                                             </span>
                                                             <span className="font-medium text-zinc-200">
-                                                                {ticket.booking?.showtime?.show_date} • {ticket.booking?.showtime?.start_time ? ticket.booking.showtime.start_time.substring(0, 5) : ''}
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.show_date
+                                                                }{' '}
+                                                                •{' '}
+                                                                {ticket.booking
+                                                                    ?.showtime
+                                                                    ?.start_time
+                                                                    ? ticket.booking.showtime.start_time.substring(
+                                                                          0,
+                                                                          5,
+                                                                      )
+                                                                    : ''}
                                                             </span>
                                                         </div>
                                                         <div className="text-right">
-                                                            <span className="text-[#71717A] text-[10px] uppercase font-medium block">
+                                                            <span className="block text-[10px] font-medium text-[#71717A] uppercase">
                                                                 Kursi
                                                             </span>
-                                                            <span className="font-mono font-bold text-white text-sm">
-                                                                {ticket.seat?.row_label}{ticket.seat?.seat_number}
+                                                            <span className="font-mono text-sm font-bold text-white">
+                                                                {
+                                                                    ticket.seat
+                                                                        ?.row_label
+                                                                }
+                                                                {
+                                                                    ticket.seat
+                                                                        ?.seat_number
+                                                                }
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#27272A]">
-                                                    <Link href={`/tickets/${ticket.booking?.booking_code}`} className="block">
-                                                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1.5 h-8 rounded-lg flex items-center justify-center gap-1.5">
+                                                <div className="grid grid-cols-2 gap-2 border-t border-[#27272A] pt-2">
+                                                    <Link
+                                                        href={`/tickets/${ticket.booking?.booking_code}`}
+                                                        className="block"
+                                                    >
+                                                        <Button className="flex h-8 w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600 py-1.5 text-xs font-medium text-white hover:bg-blue-700">
                                                             <QrCode className="size-3.5" />
                                                             <span>Scan QR</span>
                                                         </Button>
@@ -168,7 +238,10 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                                                         rel="noreferrer"
                                                         className="block"
                                                     >
-                                                        <Button variant="outline" className="w-full border-[#27272A] bg-[#111114] hover:bg-zinc-800 text-zinc-200 text-xs py-1.5 h-8 rounded-lg flex items-center justify-center gap-1.5">
+                                                        <Button
+                                                            variant="outline"
+                                                            className="flex h-8 w-full items-center justify-center gap-1.5 rounded-lg border-[#27272A] bg-[#111114] py-1.5 text-xs text-zinc-200 hover:bg-zinc-800"
+                                                        >
                                                             <Download className="size-3.5" />
                                                             <span>PDF</span>
                                                         </Button>
@@ -179,18 +252,22 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="bg-[#111114] border border-[#27272A] rounded-xl p-8 sm:p-12 text-center space-y-3">
-                                    <Ticket className="size-8 text-[#71717A] mx-auto" />
+                                <div className="space-y-3 rounded-xl border border-[#27272A] bg-[#111114] p-8 text-center sm:p-12">
+                                    <Ticket className="mx-auto size-8 text-[#71717A]" />
                                     <div className="space-y-0.5">
                                         <h3 className="text-sm font-semibold text-zinc-200">
                                             Tidak Ada Tiket Aktif
                                         </h3>
                                         <p className="text-xs text-[#71717A]">
-                                            Anda belum memiliki tiket untuk penayangan bioskop yang akan datang.
+                                            Anda belum memiliki tiket untuk
+                                            penayangan bioskop yang akan datang.
                                         </p>
                                     </div>
-                                    <Link href="/movies" className="inline-block pt-1">
-                                        <Button className="bg-[#E50914] hover:bg-red-700 text-white text-xs font-medium px-4 py-2 rounded-lg">
+                                    <Link
+                                        href="/movies"
+                                        className="inline-block pt-1"
+                                    >
+                                        <Button className="rounded-lg bg-[#E50914] px-4 py-2 text-xs font-medium text-white hover:bg-red-700">
                                             Pesan Tiket Sekarang
                                         </Button>
                                     </Link>
@@ -203,47 +280,105 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                     {activeTab === 'past' && (
                         <div>
                             {pastTickets.data && pastTickets.data.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
                                     {pastTickets.data.map((ticket) => (
                                         <Card
                                             key={ticket.id}
-                                            className="bg-[#18181B] border-[#27272A] opacity-75 hover:opacity-100 transition-opacity rounded-xl overflow-hidden flex flex-col justify-between shadow-none"
+                                            className="flex flex-col justify-between overflow-hidden rounded-xl border-[#27272A] bg-[#18181B] opacity-75 shadow-none transition-opacity hover:opacity-100"
                                         >
-                                            <CardContent className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                                            <CardContent className="flex flex-1 flex-col justify-between space-y-3 p-4">
                                                 <div className="space-y-3">
                                                     <div className="flex gap-3">
-                                                        <div className="w-12 h-16 rounded bg-[#111114] overflow-hidden shrink-0 border border-[#27272A] grayscale">
+                                                        <div className="h-16 w-12 shrink-0 overflow-hidden rounded border border-[#27272A] bg-[#111114] grayscale">
                                                             <img
-                                                                src={ticket.booking?.showtime?.movie?.poster_path ? (ticket.booking.showtime.movie.poster_path.startsWith('http') || ticket.booking.showtime.movie.poster_path.startsWith('/') ? ticket.booking.showtime.movie.poster_path : `/storage/${ticket.booking.showtime.movie.poster_path}`) : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'}
-                                                                alt={ticket.booking?.showtime?.movie?.title}
-                                                                className="w-full h-full object-cover"
+                                                                src={
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.poster_path
+                                                                        ? ticket.booking.showtime.movie.poster_path.startsWith(
+                                                                              'http',
+                                                                          ) ||
+                                                                          ticket.booking.showtime.movie.poster_path.startsWith(
+                                                                              '/',
+                                                                          )
+                                                                            ? ticket
+                                                                                  .booking
+                                                                                  .showtime
+                                                                                  .movie
+                                                                                  .poster_path
+                                                                            : `/storage/${ticket.booking.showtime.movie.poster_path}`
+                                                                        : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
+                                                                }
+                                                                alt={
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.title
+                                                                }
+                                                                className="h-full w-full object-cover"
                                                             />
                                                         </div>
 
-                                                        <div className="flex-1 min-w-0 space-y-1 text-left">
+                                                        <div className="min-w-0 flex-1 space-y-1 text-left">
                                                             <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-medium text-zinc-400">
-                                                                {ticket.is_used ? 'Sudah Dipakai' : 'Selesai'}
+                                                                {ticket.is_used
+                                                                    ? 'Sudah Dipakai'
+                                                                    : 'Selesai'}
                                                             </span>
-                                                            <h3 className="font-medium text-zinc-300 text-xs truncate">
-                                                                {ticket.booking?.showtime?.movie?.title}
+                                                            <h3 className="truncate text-xs font-medium text-zinc-300">
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.movie
+                                                                        ?.title
+                                                                }
                                                             </h3>
-                                                            <p className="text-[11px] text-[#71717A] truncate">
-                                                                {ticket.booking?.showtime?.cinema?.name}
+                                                            <p className="truncate text-[11px] text-[#71717A]">
+                                                                {
+                                                                    ticket
+                                                                        .booking
+                                                                        ?.showtime
+                                                                        ?.cinema
+                                                                        ?.name
+                                                                }
                                                             </p>
                                                         </div>
                                                     </div>
 
-                                                    <div className="bg-[#111114] rounded-lg p-2.5 text-xs text-[#A1A1AA] flex justify-between border border-[#27272A]">
-                                                        <span>{ticket.booking?.showtime?.show_date}</span>
-                                                        <span className="font-mono text-zinc-300 font-semibold">
-                                                            {ticket.seat?.row_label}{ticket.seat?.seat_number}
+                                                    <div className="flex justify-between rounded-lg border border-[#27272A] bg-[#111114] p-2.5 text-xs text-[#A1A1AA]">
+                                                        <span>
+                                                            {
+                                                                ticket.booking
+                                                                    ?.showtime
+                                                                    ?.show_date
+                                                            }
+                                                        </span>
+                                                        <span className="font-mono font-semibold text-zinc-300">
+                                                            {
+                                                                ticket.seat
+                                                                    ?.row_label
+                                                            }
+                                                            {
+                                                                ticket.seat
+                                                                    ?.seat_number
+                                                            }
                                                         </span>
                                                     </div>
                                                 </div>
 
                                                 <div className="pt-2">
-                                                    <Link href={`/tickets/${ticket.booking?.booking_code}`} className="block">
-                                                        <Button variant="outline" className="w-full border-[#27272A] bg-[#111114] text-zinc-400 hover:text-white text-xs h-8 rounded-lg">
+                                                    <Link
+                                                        href={`/tickets/${ticket.booking?.booking_code}`}
+                                                        className="block"
+                                                    >
+                                                        <Button
+                                                            variant="outline"
+                                                            className="h-8 w-full rounded-lg border-[#27272A] bg-[#111114] text-xs text-zinc-400 hover:text-white"
+                                                        >
                                                             Detail Tiket
                                                         </Button>
                                                     </Link>
@@ -253,13 +388,12 @@ export default function MyTicketsPage({ activeTickets, pastTickets }: Props) {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="bg-[#111114] border border-[#27272A] rounded-xl p-8 sm:p-12 text-center text-[#71717A] text-xs">
+                                <div className="rounded-xl border border-[#27272A] bg-[#111114] p-8 text-center text-xs text-[#71717A] sm:p-12">
                                     Belum ada riwayat tiket lampau.
                                 </div>
                             )}
                         </div>
                     )}
-
                 </div>
             </div>
         </CinemaLayout>

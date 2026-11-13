@@ -11,7 +11,13 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AdminLayout from '@/layouts/admin-layout';
@@ -55,14 +61,14 @@ export default function AdminReportsIndex({
                 start_date: startDate,
                 end_date: endDate,
             },
-            { preserveState: true }
+            { preserveState: true },
         );
     };
 
     const handleExportPdf = () => {
         window.open(
             `/admin/reports/export/pdf?start_date=${startDate}&end_date=${endDate}`,
-            '_blank'
+            '_blank',
         );
     };
 
@@ -85,13 +91,14 @@ export default function AdminReportsIndex({
                             Laporan Finansial & Okupansi
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Analisis pendapatan kotor, tiket terjual, dan performa cabang bioskop.
+                            Analisis pendapatan kotor, tiket terjual, dan
+                            performa cabang bioskop.
                         </p>
                     </div>
 
                     <Button
                         onClick={handleExportPdf}
-                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/30 font-medium"
+                        className="bg-blue-600 font-medium text-white shadow-lg shadow-blue-900/30 hover:bg-blue-700"
                     >
                         <Download className="mr-1.5 size-4" />
                         Download Laporan PDF
@@ -103,28 +110,44 @@ export default function AdminReportsIndex({
                     <CardContent className="pt-6">
                         <div className="flex flex-wrap items-end gap-4">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="start_d" className="text-xs text-zinc-400">Dari Tanggal:</Label>
+                                <Label
+                                    htmlFor="start_d"
+                                    className="text-xs text-zinc-400"
+                                >
+                                    Dari Tanggal:
+                                </Label>
                                 <Input
                                     id="start_d"
                                     type="date"
                                     value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="bg-zinc-950/60 border-zinc-800 text-xs text-white"
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
+                                    className="border-zinc-800 bg-zinc-950/60 text-xs text-white"
                                 />
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="end_d" className="text-xs text-zinc-400">Sampai Tanggal:</Label>
+                                <Label
+                                    htmlFor="end_d"
+                                    className="text-xs text-zinc-400"
+                                >
+                                    Sampai Tanggal:
+                                </Label>
                                 <Input
                                     id="end_d"
                                     type="date"
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
-                                    className="bg-zinc-950/60 border-zinc-800 text-xs text-white"
+                                    className="border-zinc-800 bg-zinc-950/60 text-xs text-white"
                                 />
                             </div>
 
-                            <Button onClick={handleFilter} variant="outline" className="border-zinc-700 text-xs text-zinc-300">
+                            <Button
+                                onClick={handleFilter}
+                                variant="outline"
+                                className="border-zinc-700 text-xs text-zinc-300"
+                            >
                                 <Filter className="mr-1.5 size-3.5" />
                                 Terapkan Filter
                             </Button>
@@ -136,37 +159,50 @@ export default function AdminReportsIndex({
                 <div className="grid gap-4 sm:grid-cols-3">
                     <Card className="border-zinc-800/80 bg-zinc-900/40">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-xs uppercase text-zinc-400">Total Pendapatan</CardTitle>
+                            <CardTitle className="text-xs text-zinc-400 uppercase">
+                                Total Pendapatan
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-emerald-400">
                                 {formatCurrency(metrics.total_revenue)}
                             </div>
-                            <p className="mt-1 text-xs text-zinc-500">Omzet tiket periode ini</p>
+                            <p className="mt-1 text-xs text-zinc-500">
+                                Omzet tiket periode ini
+                            </p>
                         </CardContent>
                     </Card>
 
                     <Card className="border-zinc-800/80 bg-zinc-900/40">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-xs uppercase text-zinc-400">Total Transaksi</CardTitle>
+                            <CardTitle className="text-xs text-zinc-400 uppercase">
+                                Total Transaksi
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-white">
-                                {metrics.total_transactions.toLocaleString()} Pesanan
+                                {metrics.total_transactions.toLocaleString()}{' '}
+                                Pesanan
                             </div>
-                            <p className="mt-1 text-xs text-zinc-500">Transaksi lunas</p>
+                            <p className="mt-1 text-xs text-zinc-500">
+                                Transaksi lunas
+                            </p>
                         </CardContent>
                     </Card>
 
                     <Card className="border-zinc-800/80 bg-zinc-900/40">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-xs uppercase text-zinc-400">Total Tiket Terjual</CardTitle>
+                            <CardTitle className="text-xs text-zinc-400 uppercase">
+                                Total Tiket Terjual
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-red-400">
                                 {metrics.total_tickets.toLocaleString()} Tiket
                             </div>
-                            <p className="mt-1 text-xs text-zinc-500">Lembar tiket fisik/digital</p>
+                            <p className="mt-1 text-xs text-zinc-500">
+                                Lembar tiket fisik/digital
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
@@ -184,30 +220,39 @@ export default function AdminReportsIndex({
                     <CardContent className="p-0">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm text-zinc-300">
-                                <thead className="border-b border-zinc-800 text-xs uppercase text-zinc-500">
+                                <thead className="border-b border-zinc-800 text-xs text-zinc-500 uppercase">
                                     <tr>
-                                        <th className="py-3 px-4">Nama Bioskop</th>
-                                        <th className="py-3 px-4">Kota</th>
-                                        <th className="py-3 px-4">Tiket Terjual</th>
-                                        <th className="py-3 px-4 text-right">Pendapatan Kotor</th>
+                                        <th className="px-4 py-3">
+                                            Nama Bioskop
+                                        </th>
+                                        <th className="px-4 py-3">Kota</th>
+                                        <th className="px-4 py-3">
+                                            Tiket Terjual
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Pendapatan Kotor
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-zinc-800/60">
                                     {cinemasReport.map((c) => (
-                                        <tr key={c.id} className="hover:bg-zinc-800/30 transition-colors">
-                                            <td className="py-3 px-4 font-semibold text-white">
+                                        <tr
+                                            key={c.id}
+                                            className="transition-colors hover:bg-zinc-800/30"
+                                        >
+                                            <td className="px-4 py-3 font-semibold text-white">
                                                 {c.name}
                                             </td>
-                                            <td className="py-3 px-4 text-zinc-400">
+                                            <td className="px-4 py-3 text-zinc-400">
                                                 <div className="flex items-center gap-1.5">
                                                     <MapPin className="size-3 text-red-500" />
                                                     <span>{c.city}</span>
                                                 </div>
                                             </td>
-                                            <td className="py-3 px-4 font-mono font-medium text-zinc-200">
+                                            <td className="px-4 py-3 font-mono font-medium text-zinc-200">
                                                 {c.tickets_sold} Kursi
                                             </td>
-                                            <td className="py-3 px-4 text-right font-bold text-emerald-400">
+                                            <td className="px-4 py-3 text-right font-bold text-emerald-400">
                                                 {formatCurrency(c.revenue)}
                                             </td>
                                         </tr>
@@ -221,4 +266,3 @@ export default function AdminReportsIndex({
         </AdminLayout>
     );
 }
-

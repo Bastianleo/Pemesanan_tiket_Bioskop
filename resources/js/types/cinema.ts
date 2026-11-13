@@ -109,7 +109,12 @@ export type PaymentMethod =
     | 'ewallet_ovo'
     | 'credit_card';
 
-export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'expired' | 'refunded';
+export type PaymentStatus =
+    | 'pending'
+    | 'paid'
+    | 'failed'
+    | 'expired'
+    | 'refunded';
 
 export interface Payment {
     id: number;

@@ -60,12 +60,12 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-cinema-red: #E50914;
-    --color-cinema-red-hover: #C10711;
-    --color-cinema-gold: #EAB308;
-    --color-cinema-dark: #080C14;
-    --color-cinema-surface: #0F172A;
-    --color-cinema-card: #141E33;
+    --color-cinema-red: #e50914;
+    --color-cinema-red-hover: #c10711;
+    --color-cinema-gold: #eab308;
+    --color-cinema-dark: #080c14;
+    --color-cinema-surface: #0f172a;
+    --color-cinema-card: #141e33;
 }
 
 :root {

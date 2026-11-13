@@ -14,7 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AdminLayout from '@/layouts/admin-layout';
 import type { Voucher } from '@/types';
 
@@ -40,7 +46,9 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
         max_discount: 25000,
         quota: 100,
         start_date: new Date().toISOString().substring(0, 10),
-        end_date: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString().substring(0, 10),
+        end_date: new Date(Date.now() + 30 * 24 * 3600 * 1000)
+            .toISOString()
+            .substring(0, 10),
         is_active: true,
     });
 
@@ -71,11 +79,15 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
                             Manajemen Promo & Kupon Diskon
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Buat kode voucher promo potongan persentase maupun nominal tunai.
+                            Buat kode voucher promo potongan persentase maupun
+                            nominal tunai.
                         </p>
                     </div>
 
-                    <Button onClick={() => setIsCreateOpen(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium">
+                    <Button
+                        onClick={() => setIsCreateOpen(true)}
+                        className="bg-blue-600 font-medium text-white hover:bg-blue-700"
+                    >
                         <Plus className="mr-1.5 size-4" />
                         Buat Voucher Baru
                     </Button>
@@ -83,43 +95,72 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {vouchers.data.map((v) => (
-                        <Card key={v.id} className="border-zinc-800/80 bg-zinc-900/40 backdrop-blur-sm">
+                        <Card
+                            key={v.id}
+                            className="border-zinc-800/80 bg-zinc-900/40 backdrop-blur-sm"
+                        >
                             <CardContent className="p-5">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-center gap-2">
                                         <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2 text-red-500">
                                             <Tag className="size-4" />
                                         </div>
-                                        <span className="font-mono text-base font-bold text-white tracking-wider">
+                                        <span className="font-mono text-base font-bold tracking-wider text-white">
                                             {v.code}
                                         </span>
                                     </div>
 
-                                    <Badge className={v.is_active ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-800 text-zinc-400'}>
+                                    <Badge
+                                        className={
+                                            v.is_active
+                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                                : 'bg-zinc-800 text-zinc-400'
+                                        }
+                                    >
                                         {v.is_active ? 'Aktif' : 'Nonaktif'}
                                     </Badge>
                                 </div>
 
                                 <div className="mt-4 space-y-2">
-                                    <h3 className="text-sm font-semibold text-zinc-200">{v.title}</h3>
+                                    <h3 className="text-sm font-semibold text-zinc-200">
+                                        {v.title}
+                                    </h3>
                                     {v.description && (
-                                        <p className="text-xs text-zinc-400 line-clamp-2">{v.description}</p>
+                                        <p className="line-clamp-2 text-xs text-zinc-400">
+                                            {v.description}
+                                        </p>
                                     )}
 
-                                    <div className="rounded-lg bg-zinc-950/60 p-3 border border-zinc-800/60 space-y-1.5 text-xs">
+                                    <div className="space-y-1.5 rounded-lg border border-zinc-800/60 bg-zinc-950/60 p-3 text-xs">
                                         <div className="flex justify-between">
-                                            <span className="text-zinc-500">Nilai Diskon:</span>
+                                            <span className="text-zinc-500">
+                                                Nilai Diskon:
+                                            </span>
                                             <span className="font-semibold text-emerald-400">
-                                                {v.discount_type === 'percentage' ? `${v.discount_value}%` : `Rp ${v.discount_value.toLocaleString('id-ID')}`}
+                                                {v.discount_type ===
+                                                'percentage'
+                                                    ? `${v.discount_value}%`
+                                                    : `Rp ${v.discount_value.toLocaleString('id-ID')}`}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-zinc-500">Min. Transaksi:</span>
-                                            <span className="text-zinc-300">Rp {v.min_purchase.toLocaleString('id-ID')}</span>
+                                            <span className="text-zinc-500">
+                                                Min. Transaksi:
+                                            </span>
+                                            <span className="text-zinc-300">
+                                                Rp{' '}
+                                                {v.min_purchase.toLocaleString(
+                                                    'id-ID',
+                                                )}
+                                            </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-zinc-500">Kuota Terpakai:</span>
-                                            <span className="font-medium text-white">{v.used_count} / {v.quota}</span>
+                                            <span className="text-zinc-500">
+                                                Kuota Terpakai:
+                                            </span>
+                                            <span className="font-medium text-white">
+                                                {v.used_count} / {v.quota}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -149,36 +190,53 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
                         <DialogHeader>
                             <DialogTitle>Buat Kode Voucher Baru</DialogTitle>
                             <DialogDescription className="text-zinc-400">
-                                Tentukan parameter kupon diskon dan batas maksimal pemakaian.
+                                Tentukan parameter kupon diskon dan batas
+                                maksimal pemakaian.
                             </DialogDescription>
                         </DialogHeader>
 
-                        <form onSubmit={handleCreate} className="space-y-4 pt-2">
+                        <form
+                            onSubmit={handleCreate}
+                            className="space-y-4 pt-2"
+                        >
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="v_code">Kode Kupon *</Label>
                                     <Input
                                         id="v_code"
                                         value={data.code}
-                                        onChange={(e) => setData('code', e.target.value.toUpperCase())}
+                                        onChange={(e) =>
+                                            setData(
+                                                'code',
+                                                e.target.value.toUpperCase(),
+                                            )
+                                        }
                                         placeholder="CINEPASS20"
-                                        className="bg-zinc-900 border-zinc-800 font-mono uppercase"
+                                        className="border-zinc-800 bg-zinc-900 font-mono uppercase"
                                         required
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="v_type">Tipe Diskon *</Label>
+                                    <Label htmlFor="v_type">
+                                        Tipe Diskon *
+                                    </Label>
                                     <Select
                                         value={data.discount_type}
-                                        onValueChange={(val: any) => setData('discount_type', val)}
+                                        onValueChange={(val: any) =>
+                                            setData('discount_type', val)
+                                        }
                                     >
-                                        <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                                        <SelectTrigger className="border-zinc-800 bg-zinc-900 text-zinc-200">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
-                                            <SelectItem value="percentage">Persentase (%)</SelectItem>
-                                            <SelectItem value="fixed">Nominal Tunai (Rp)</SelectItem>
+                                        <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-200">
+                                            <SelectItem value="percentage">
+                                                Persentase (%)
+                                            </SelectItem>
+                                            <SelectItem value="fixed">
+                                                Nominal Tunai (Rp)
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -189,44 +247,70 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
                                 <Input
                                     id="v_title"
                                     value={data.title}
-                                    onChange={(e) => setData('title', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('title', e.target.value)
+                                    }
                                     placeholder="Diskon Pelanggan Baru 20%"
-                                    className="bg-zinc-900 border-zinc-800"
+                                    className="border-zinc-800 bg-zinc-900"
                                     required
                                 />
                             </div>
 
                             <div className="grid grid-cols-3 gap-3">
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="v_val" className="text-xs">Nilai Diskon *</Label>
+                                    <Label htmlFor="v_val" className="text-xs">
+                                        Nilai Diskon *
+                                    </Label>
                                     <Input
                                         id="v_val"
                                         type="number"
                                         value={data.discount_value}
-                                        onChange={(e) => setData('discount_value', parseFloat(e.target.value) || 0)}
-                                        className="bg-zinc-900 border-zinc-800 text-xs"
+                                        onChange={(e) =>
+                                            setData(
+                                                'discount_value',
+                                                parseFloat(e.target.value) || 0,
+                                            )
+                                        }
+                                        className="border-zinc-800 bg-zinc-900 text-xs"
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="v_min" className="text-xs">Min. Beli (Rp)</Label>
+                                    <Label htmlFor="v_min" className="text-xs">
+                                        Min. Beli (Rp)
+                                    </Label>
                                     <Input
                                         id="v_min"
                                         type="number"
                                         value={data.min_purchase}
-                                        onChange={(e) => setData('min_purchase', parseFloat(e.target.value) || 0)}
-                                        className="bg-zinc-900 border-zinc-800 text-xs"
+                                        onChange={(e) =>
+                                            setData(
+                                                'min_purchase',
+                                                parseFloat(e.target.value) || 0,
+                                            )
+                                        }
+                                        className="border-zinc-800 bg-zinc-900 text-xs"
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="v_quota" className="text-xs">Kuota Pakai</Label>
+                                    <Label
+                                        htmlFor="v_quota"
+                                        className="text-xs"
+                                    >
+                                        Kuota Pakai
+                                    </Label>
                                     <Input
                                         id="v_quota"
                                         type="number"
                                         value={data.quota}
-                                        onChange={(e) => setData('quota', parseInt(e.target.value) || 100)}
-                                        className="bg-zinc-900 border-zinc-800 text-xs"
+                                        onChange={(e) =>
+                                            setData(
+                                                'quota',
+                                                parseInt(e.target.value) || 100,
+                                            )
+                                        }
+                                        className="border-zinc-800 bg-zinc-900 text-xs"
                                         required
                                     />
                                 </div>
@@ -234,34 +318,54 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="v_start">Mulai Berlaku *</Label>
+                                    <Label htmlFor="v_start">
+                                        Mulai Berlaku *
+                                    </Label>
                                     <Input
                                         id="v_start"
                                         type="date"
                                         value={data.start_date}
-                                        onChange={(e) => setData('start_date', e.target.value)}
-                                        className="bg-zinc-900 border-zinc-800 text-xs"
+                                        onChange={(e) =>
+                                            setData(
+                                                'start_date',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="border-zinc-800 bg-zinc-900 text-xs"
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="v_end">Berakhir Pada *</Label>
+                                    <Label htmlFor="v_end">
+                                        Berakhir Pada *
+                                    </Label>
                                     <Input
                                         id="v_end"
                                         type="date"
                                         value={data.end_date}
-                                        onChange={(e) => setData('end_date', e.target.value)}
-                                        className="bg-zinc-900 border-zinc-800 text-xs"
+                                        onChange={(e) =>
+                                            setData('end_date', e.target.value)
+                                        }
+                                        className="border-zinc-800 bg-zinc-900 text-xs"
                                         required
                                     />
                                 </div>
                             </div>
 
                             <DialogFooter className="pt-2">
-                                <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} className="border-zinc-800">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsCreateOpen(false)}
+                                    className="border-zinc-800"
+                                >
                                     Batal
                                 </Button>
-                                <Button type="submit" disabled={processing} className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium">
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="bg-emerald-600 font-medium text-white hover:bg-emerald-700"
+                                >
                                     Simpan Voucher
                                 </Button>
                             </DialogFooter>
@@ -272,4 +376,3 @@ export default function AdminVouchersIndex({ vouchers }: Props) {
         </AdminLayout>
     );
 }
-

@@ -60,12 +60,19 @@ interface Props {
     };
 }
 
-export default function SeatPicker({ showtime, seats: initialSeats, availableVouchers = [], config }: Props) {
+export default function SeatPicker({
+    showtime,
+    seats: initialSeats,
+    availableVouchers = [],
+    config,
+}: Props) {
     const [seats, setSeats] = useState<SeatLayoutItem[]>(initialSeats);
     const [selectedSeatIds, setSelectedSeatIds] = useState<number[]>([]);
     const [isPolling, setIsPolling] = useState(false);
     const [voucherInput, setVoucherInput] = useState<string>('');
-    const [appliedVoucher, setAppliedVoucher] = useState<VoucherItem | null>(null);
+    const [appliedVoucher, setAppliedVoucher] = useState<VoucherItem | null>(
+        null,
+    );
     const [voucherError, setVoucherError] = useState<string>('');
 
     const { data, setData, post, processing, errors } = useForm({
@@ -86,11 +93,19 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                     // If a currently selected seat was taken by someone else during polling, deselect and notify
                     setSelectedSeatIds((prevSelected) => {
                         const stillAvailable = prevSelected.filter((id) => {
-                            const found = json.seats.find((s: SeatLayoutItem) => s.id === id);
-                            return found && (found.status === 'available' || found.status === 'held_by_me');
+                            const found = json.seats.find(
+                                (s: SeatLayoutItem) => s.id === id,
+                            );
+                            return (
+                                found &&
+                                (found.status === 'available' ||
+                                    found.status === 'held_by_me')
+                            );
                         });
                         if (stillAvailable.length !== prevSelected.length) {
-                            toast.warning('Beberapa kursi yang Anda pilih telah dipesan oleh pengguna lain.');
+                            toast.warning(
+                                'Beberapa kursi yang Anda pilih telah dipesan oleh pengguna lain.',
+                            );
                             setData('seat_ids', stillAvailable);
                         }
                         return stillAvailable;
@@ -131,7 +146,9 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
             setData('seat_ids', next);
         } else {
             if (selectedSeatIds.length >= config.max_seats) {
-                toast.error(`Maksimal pembelian adalah ${config.max_seats} kursi per pesanan.`);
+                toast.error(
+                    `Maksimal pembelian adalah ${config.max_seats} kursi per pesanan.`,
+                );
                 return;
             }
             const next = [...selectedSeatIds, seat.id];
@@ -141,7 +158,9 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
     };
 
     // Calculate selected seats details & total
-    const selectedSeatObjects = seats.filter((s) => selectedSeatIds.includes(s.id));
+    const selectedSeatObjects = seats.filter((s) =>
+        selectedSeatIds.includes(s.id),
+    );
     const subtotal = selectedSeatObjects.reduce((acc, s) => acc + s.price, 0);
 
     // Calculate voucher discount
@@ -149,13 +168,18 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
     if (appliedVoucher && subtotal > 0) {
         if (appliedVoucher.discount_type === 'percentage') {
             const calculated = (subtotal * appliedVoucher.discount_value) / 100;
-            discount = appliedVoucher.max_discount ? Math.min(calculated, appliedVoucher.max_discount) : calculated;
+            discount = appliedVoucher.max_discount
+                ? Math.min(calculated, appliedVoucher.max_discount)
+                : calculated;
         } else {
             discount = Math.min(appliedVoucher.discount_value, subtotal);
         }
     }
 
-    const totalAmount = subtotal > 0 ? Math.max(0, (subtotal - discount) + config.service_fee) : 0;
+    const totalAmount =
+        subtotal > 0
+            ? Math.max(0, subtotal - discount + config.service_fee)
+            : 0;
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('id-ID', {
@@ -177,7 +201,9 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
             return;
         }
 
-        const found = availableVouchers.find((v) => v.code.toUpperCase() === code);
+        const found = availableVouchers.find(
+            (v) => v.code.toUpperCase() === code,
+        );
         if (!found) {
             // Also allow applying general code by passing it to backend
             setAppliedVoucher({
@@ -196,7 +222,9 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
         }
 
         if (subtotal < found.min_purchase) {
-            setVoucherError(`Minimal pembelian untuk promo ini adalah ${formatCurrency(found.min_purchase)}`);
+            setVoucherError(
+                `Minimal pembelian untuk promo ini adalah ${formatCurrency(found.min_purchase)}`,
+            );
             return;
         }
 
@@ -228,12 +256,16 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
         <CinemaLayout>
             <Head title={`Pilih Kursi - ${showtime.movie.title}`} />
 
-            <div className="mx-auto max-w-[1600px] w-full px-4 py-8 sm:px-6 lg:px-8 xl:px-12 space-y-8 overflow-x-clip">
+            <div className="mx-auto w-full max-w-[1600px] space-y-8 overflow-x-clip px-4 py-8 sm:px-6 lg:px-8 xl:px-12">
                 {/* Header Info Bar */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[#27272A] pb-6">
+                <div className="flex flex-col gap-4 border-b border-[#27272A] pb-6 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
                         <Link href={`/movies/${showtime.movie.slug}`}>
-                            <Button variant="outline" size="sm" className="h-8.5 w-8.5 p-0 border-[#27272A] bg-[#18181B] text-zinc-300 hover:text-white rounded-lg">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8.5 w-8.5 rounded-lg border-[#27272A] bg-[#18181B] p-0 text-zinc-300 hover:text-white"
+                            >
                                 <ArrowLeft className="size-4" />
                             </Button>
                         </Link>
@@ -243,16 +275,29 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                     {showtime.movie.title}
                                 </h1>
                                 <span className="rounded bg-zinc-800 px-2 py-0.5 text-xs font-medium text-zinc-300">
-                                    {(showtime.studio.studio_type || showtime.studio.type || 'regular').toUpperCase()}
+                                    {(
+                                        showtime.studio.studio_type ||
+                                        showtime.studio.type ||
+                                        'regular'
+                                    ).toUpperCase()}
                                 </span>
                             </div>
-                            <div className="flex flex-wrap items-center gap-2 text-xs text-[#A1A1AA] mt-0.5">
+                            <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[#A1A1AA]">
                                 <span>{showtime.studio.cinema.name}</span>
                                 <span>•</span>
                                 <span>{showtime.studio.name}</span>
                                 <span>•</span>
                                 <span className="text-zinc-200">
-                                    {showtime.show_date ? new Date(showtime.show_date).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' }) : ''} ({showtime.start_time.substring(0, 5)} WIB)
+                                    {showtime.show_date
+                                        ? new Date(
+                                              showtime.show_date,
+                                          ).toLocaleDateString('id-ID', {
+                                              weekday: 'short',
+                                              day: 'numeric',
+                                              month: 'short',
+                                          })
+                                        : ''}{' '}
+                                    ({showtime.start_time.substring(0, 5)} WIB)
                                 </span>
                             </div>
                         </div>
@@ -265,17 +310,21 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                 Memperbarui...
                             </span>
                         )}
-                        <span className="rounded-lg bg-[#18181B] border border-[#27272A] px-3 py-1 text-zinc-300">
+                        <span className="rounded-lg border border-[#27272A] bg-[#18181B] px-3 py-1 text-zinc-300">
                             Maks. {config.max_seats} Kursi
                         </span>
                     </div>
                 </div>
 
                 {/* Error Banner if any */}
-                {((errors as Record<string, string | undefined>).seats || errors.seat_ids) && (
+                {((errors as Record<string, string | undefined>).seats ||
+                    errors.seat_ids) && (
                     <div className="flex items-center gap-3 rounded-lg border border-red-500/50 bg-[#18181B] p-4 text-xs text-red-300">
                         <AlertCircle className="size-4 shrink-0 text-red-500" />
-                        <div>{(errors as Record<string, string | undefined>).seats || errors.seat_ids}</div>
+                        <div>
+                            {(errors as Record<string, string | undefined>)
+                                .seats || errors.seat_ids}
+                        </div>
                     </div>
                 )}
 
@@ -290,12 +339,14 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                     {/* Dipilih: Merah */}
                     <div className="flex items-center gap-2">
                         <div className="h-4.5 w-4.5 rounded bg-[#E50914]" />
-                        <span className="text-[#FAFAFA] font-medium">Pilihan Anda</span>
+                        <span className="font-medium text-[#FAFAFA]">
+                            Pilihan Anda
+                        </span>
                     </div>
 
                     {/* VIP: Gold/Amber tint */}
                     <div className="flex items-center gap-2">
-                        <div className="h-4.5 w-4.5 rounded border border-amber-500/50 bg-amber-950/30 text-amber-300 flex items-center justify-center font-semibold text-[8px]">
+                        <div className="flex h-4.5 w-4.5 items-center justify-center rounded border border-amber-500/50 bg-amber-950/30 text-[8px] font-semibold text-amber-300">
                             VIP
                         </div>
                         <span className="text-[#A1A1AA]">VIP (+25%)</span>
@@ -303,7 +354,7 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
 
                     {/* Terisi / Locked */}
                     <div className="flex items-center gap-2">
-                        <div className="h-4.5 w-4.5 rounded bg-zinc-900 border border-[#27272A] text-zinc-600 flex items-center justify-center text-[9px]">
+                        <div className="flex h-4.5 w-4.5 items-center justify-center rounded border border-[#27272A] bg-zinc-900 text-[9px] text-zinc-600">
                             ✕
                         </div>
                         <span className="text-[#71717A]">Terisi</span>
@@ -312,11 +363,11 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
 
                 <div className="grid gap-8 lg:grid-cols-3">
                     {/* Cinema Screen & Interactive Seats Grid (2 Columns) */}
-                    <div className="lg:col-span-2 space-y-6">
-                        <Card className="border-[#27272A] bg-[#111114] rounded-xl overflow-hidden shadow-none">
-                            <CardContent className="pt-8 pb-12 overflow-x-auto">
+                    <div className="space-y-6 lg:col-span-2">
+                        <Card className="overflow-hidden rounded-xl border-[#27272A] bg-[#111114] shadow-none">
+                            <CardContent className="overflow-x-auto pt-8 pb-12">
                                 {/* Curved Cinema Screen */}
-                                <div className="mx-auto w-3/4 max-w-md mb-10 text-center">
+                                <div className="mx-auto mb-10 w-3/4 max-w-md text-center">
                                     <div className="h-1 w-full rounded-full bg-zinc-600" />
                                     <div className="mt-2 text-[10px] font-semibold tracking-widest text-[#71717A] uppercase">
                                         Layar Bioskop
@@ -324,48 +375,81 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                 </div>
 
                                 {/* Seat Matrix */}
-                                <div className="min-w-fit mx-auto flex flex-col items-center gap-2.5">
+                                <div className="mx-auto flex min-w-fit flex-col items-center gap-2.5">
                                     {sortedRows.map((rowLabel) => (
-                                        <div key={rowLabel} className="flex items-center gap-3">
+                                        <div
+                                            key={rowLabel}
+                                            className="flex items-center gap-3"
+                                        >
                                             <span className="w-5 text-right font-mono text-xs font-semibold text-[#71717A]">
                                                 {rowLabel}
                                             </span>
 
                                             <div className="flex items-center gap-1.5">
-                                                {seatRows[rowLabel].map((seat) => {
-                                                    const isSelected = selectedSeatIds.includes(seat.id);
-                                                    const isVip = seat.seat_type === 'vip';
-                                                    const isBooked = seat.status === 'booked' || seat.status === 'held';
-                                                    const isUnavailable = !seat.is_active || seat.status === 'unavailable';
+                                                {seatRows[rowLabel].map(
+                                                    (seat) => {
+                                                        const isSelected =
+                                                            selectedSeatIds.includes(
+                                                                seat.id,
+                                                            );
+                                                        const isVip =
+                                                            seat.seat_type ===
+                                                            'vip';
+                                                        const isBooked =
+                                                            seat.status ===
+                                                                'booked' ||
+                                                            seat.status ===
+                                                                'held';
+                                                        const isUnavailable =
+                                                            !seat.is_active ||
+                                                            seat.status ===
+                                                                'unavailable';
 
-                                                    let seatClass = '';
-                                                    if (isSelected) {
-                                                        // Pilihan Anda: Merah
-                                                        seatClass = 'bg-[#E50914] text-white font-bold border-transparent';
-                                                    } else if (isBooked || isUnavailable) {
-                                                        // Terisi / Dikunci
-                                                        seatClass = 'border border-[#27272A] bg-zinc-900/60 text-zinc-700 cursor-not-allowed';
-                                                    } else if (isVip) {
-                                                        // VIP: Amber accent
-                                                        seatClass = 'border border-amber-500/50 bg-amber-950/20 text-amber-300 hover:border-amber-400';
-                                                    } else {
-                                                        // Tersedia
-                                                        seatClass = 'border border-[#27272A] bg-[#18181B] text-zinc-300 hover:border-zinc-500 hover:text-white';
-                                                    }
+                                                        let seatClass = '';
+                                                        if (isSelected) {
+                                                            // Pilihan Anda: Merah
+                                                            seatClass =
+                                                                'bg-[#E50914] text-white font-bold border-transparent';
+                                                        } else if (
+                                                            isBooked ||
+                                                            isUnavailable
+                                                        ) {
+                                                            // Terisi / Dikunci
+                                                            seatClass =
+                                                                'border border-[#27272A] bg-zinc-900/60 text-zinc-700 cursor-not-allowed';
+                                                        } else if (isVip) {
+                                                            // VIP: Amber accent
+                                                            seatClass =
+                                                                'border border-amber-500/50 bg-amber-950/20 text-amber-300 hover:border-amber-400';
+                                                        } else {
+                                                            // Tersedia
+                                                            seatClass =
+                                                                'border border-[#27272A] bg-[#18181B] text-zinc-300 hover:border-zinc-500 hover:text-white';
+                                                        }
 
-                                                    return (
-                                                        <button
-                                                            key={seat.id}
-                                                            type="button"
-                                                            disabled={isBooked || isUnavailable}
-                                                            onClick={() => handleSeatClick(seat)}
-                                                            className={`flex h-7.5 w-7.5 items-center justify-center rounded text-[11px] font-medium transition-colors ${seatClass}`}
-                                                            title={`Kursi ${rowLabel}${seat.seat_number} - Rp ${seat.price.toLocaleString('id-ID')} (${isBooked ? 'Sudah Dipesan' : 'Tersedia'})`}
-                                                        >
-                                                            {isBooked ? '✕' : seat.seat_number}
-                                                        </button>
-                                                    );
-                                                })}
+                                                        return (
+                                                            <button
+                                                                key={seat.id}
+                                                                type="button"
+                                                                disabled={
+                                                                    isBooked ||
+                                                                    isUnavailable
+                                                                }
+                                                                onClick={() =>
+                                                                    handleSeatClick(
+                                                                        seat,
+                                                                    )
+                                                                }
+                                                                className={`flex h-7.5 w-7.5 items-center justify-center rounded text-[11px] font-medium transition-colors ${seatClass}`}
+                                                                title={`Kursi ${rowLabel}${seat.seat_number} - Rp ${seat.price.toLocaleString('id-ID')} (${isBooked ? 'Sudah Dipesan' : 'Tersedia'})`}
+                                                            >
+                                                                {isBooked
+                                                                    ? '✕'
+                                                                    : seat.seat_number}
+                                                            </button>
+                                                        );
+                                                    },
+                                                )}
                                             </div>
 
                                             <span className="w-5 text-left font-mono text-xs font-semibold text-[#71717A]">
@@ -380,33 +464,39 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
 
                     {/* Order Summary & Proceed Checkout (Sticky Side) */}
                     <div className="space-y-6">
-                        <Card className="sticky top-24 border-[#27272A] bg-[#18181B] rounded-xl shadow-none">
-                            <CardContent className="p-5 space-y-5">
+                        <Card className="sticky top-24 rounded-xl border-[#27272A] bg-[#18181B] shadow-none">
+                            <CardContent className="space-y-5 p-5">
                                 <div className="border-b border-[#27272A] pb-3">
-                                    <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-white">
                                         <Ticket className="size-4 text-[#E50914]" />
                                         Ringkasan Pesanan
                                     </h3>
-                                    <p className="text-xs text-[#71717A] mt-0.5">
-                                        Kursi dikunci selama {config.hold_duration_minutes} menit di checkout.
+                                    <p className="mt-0.5 text-xs text-[#71717A]">
+                                        Kursi dikunci selama{' '}
+                                        {config.hold_duration_minutes} menit di
+                                        checkout.
                                     </p>
                                 </div>
 
                                 {/* Selected Seats List */}
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-[#A1A1AA]">Kursi ({selectedSeatIds.length}):</span>
-                                        <span className="text-white font-medium">
-                                            {selectedSeatIds.length > 0 ? `${selectedSeatIds.length} Kursi` : '-'}
+                                        <span className="text-[#A1A1AA]">
+                                            Kursi ({selectedSeatIds.length}):
+                                        </span>
+                                        <span className="font-medium text-white">
+                                            {selectedSeatIds.length > 0
+                                                ? `${selectedSeatIds.length} Kursi`
+                                                : '-'}
                                         </span>
                                     </div>
 
                                     {selectedSeatObjects.length > 0 ? (
-                                        <div className="flex flex-wrap gap-1 p-2.5 rounded-lg bg-[#111114] border border-[#27272A]">
+                                        <div className="flex flex-wrap gap-1 rounded-lg border border-[#27272A] bg-[#111114] p-2.5">
                                             {selectedSeatObjects.map((s) => (
                                                 <span
                                                     key={s.id}
-                                                    className="rounded bg-[#E50914] text-white font-mono text-xs px-2 py-0.5"
+                                                    className="rounded bg-[#E50914] px-2 py-0.5 font-mono text-xs text-white"
                                                 >
                                                     {s.seat_code}
                                                 </span>
@@ -414,34 +504,39 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                         </div>
                                     ) : (
                                         <div className="rounded-lg border border-dashed border-[#27272A] p-3 text-center text-xs text-[#71717A]">
-                                            Klik kursi pada denah untuk memilih tempat duduk.
+                                            Klik kursi pada denah untuk memilih
+                                            tempat duduk.
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Promo Code / Voucher Section */}
-                                <div className="space-y-2 pt-1 border-t border-[#27272A]">
+                                <div className="space-y-2 border-t border-[#27272A] pt-1">
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-white font-medium flex items-center gap-1.5">
+                                        <span className="flex items-center gap-1.5 font-medium text-white">
                                             <Tag className="size-3.5 text-[#E50914]" />
                                             Kode Promo / Voucher
                                         </span>
-                                        {availableVouchers.length > 0 && !appliedVoucher && (
-                                            <span className="text-[10px] text-zinc-400">
-                                                {availableVouchers.length} tersedia
-                                            </span>
-                                        )}
+                                        {availableVouchers.length > 0 &&
+                                            !appliedVoucher && (
+                                                <span className="text-[10px] text-zinc-400">
+                                                    {availableVouchers.length}{' '}
+                                                    tersedia
+                                                </span>
+                                            )}
                                     </div>
 
                                     {appliedVoucher ? (
-                                        <div className="flex items-center justify-between p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-xs">
+                                        <div className="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-2.5 text-xs">
                                             <div>
-                                                <div className="font-semibold text-emerald-400 font-mono flex items-center gap-1">
+                                                <div className="flex items-center gap-1 font-mono font-semibold text-emerald-400">
                                                     <CheckCircle2 className="size-3 text-emerald-400" />
                                                     {appliedVoucher.code}
                                                 </div>
                                                 <div className="text-[11px] text-zinc-300">
-                                                    {discount > 0 ? `Hemat ${formatCurrency(discount)}` : appliedVoucher.title}
+                                                    {discount > 0
+                                                        ? `Hemat ${formatCurrency(discount)}`
+                                                        : appliedVoucher.title}
                                                 </div>
                                             </div>
                                             <Button
@@ -449,7 +544,7 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={handleRemoveVoucher}
-                                                className="h-7 w-7 p-0 text-zinc-400 hover:text-red-400 hover:bg-transparent"
+                                                className="h-7 w-7 p-0 text-zinc-400 hover:bg-transparent hover:text-red-400"
                                                 title="Hapus voucher"
                                             >
                                                 <Trash2 className="size-3.5" />
@@ -462,7 +557,9 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                                     placeholder="Ketik kode promo"
                                                     value={voucherInput}
                                                     onChange={(e) => {
-                                                        setVoucherInput(e.target.value);
+                                                        setVoucherInput(
+                                                            e.target.value,
+                                                        );
                                                         setVoucherError('');
                                                     }}
                                                     onKeyDown={(e) => {
@@ -471,20 +568,26 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                                             handleApplyVoucher();
                                                         }
                                                     }}
-                                                    className="h-8 text-xs bg-[#111114] border-[#27272A] text-white uppercase placeholder:normal-case placeholder:text-zinc-600 rounded-lg"
+                                                    className="h-8 rounded-lg border-[#27272A] bg-[#111114] text-xs text-white uppercase placeholder:text-zinc-600 placeholder:normal-case"
                                                 />
                                                 <Button
                                                     type="button"
-                                                    onClick={() => handleApplyVoucher()}
-                                                    disabled={!voucherInput.trim() || selectedSeatIds.length === 0}
-                                                    className="h-8 px-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg shrink-0"
+                                                    onClick={() =>
+                                                        handleApplyVoucher()
+                                                    }
+                                                    disabled={
+                                                        !voucherInput.trim() ||
+                                                        selectedSeatIds.length ===
+                                                            0
+                                                    }
+                                                    className="h-8 shrink-0 rounded-lg bg-zinc-800 px-3 text-xs text-white hover:bg-zinc-700"
                                                 >
                                                     Pakai
                                                 </Button>
                                             </div>
 
                                             {voucherError && (
-                                                <p className="text-[11px] text-red-400 flex items-center gap-1">
+                                                <p className="flex items-center gap-1 text-[11px] text-red-400">
                                                     <AlertCircle className="size-3 shrink-0" />
                                                     {voucherError}
                                                 </p>
@@ -493,20 +596,26 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                             {/* Quick Click Available Vouchers */}
                                             {availableVouchers.length > 0 && (
                                                 <div className="space-y-1 pt-0.5">
-                                                    <div className="text-[10px] text-zinc-500 uppercase tracking-wider">
+                                                    <div className="text-[10px] tracking-wider text-zinc-500 uppercase">
                                                         Pilih Promo:
                                                     </div>
                                                     <div className="flex flex-wrap gap-1">
-                                                        {availableVouchers.map((v) => (
-                                                            <button
-                                                                key={v.id}
-                                                                type="button"
-                                                                onClick={() => handleApplyVoucher(v.code)}
-                                                                className="text-[10px] px-2 py-0.5 rounded border border-dashed border-[#27272A] hover:border-zinc-500 bg-[#111114] text-zinc-300 hover:text-white transition-colors"
-                                                            >
-                                                                {v.code}
-                                                            </button>
-                                                        ))}
+                                                        {availableVouchers.map(
+                                                            (v) => (
+                                                                <button
+                                                                    key={v.id}
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        handleApplyVoucher(
+                                                                            v.code,
+                                                                        )
+                                                                    }
+                                                                    className="rounded border border-dashed border-[#27272A] bg-[#111114] px-2 py-0.5 text-[10px] text-zinc-300 transition-colors hover:border-zinc-500 hover:text-white"
+                                                                >
+                                                                    {v.code}
+                                                                </button>
+                                                            ),
+                                                        )}
                                                     </div>
                                                 </div>
                                             )}
@@ -515,42 +624,63 @@ export default function SeatPicker({ showtime, seats: initialSeats, availableVou
                                 </div>
 
                                 {/* Price Breakdown */}
-                                <div className="space-y-2 rounded-lg bg-[#111114] border border-[#27272A] p-3.5 text-xs">
+                                <div className="space-y-2 rounded-lg border border-[#27272A] bg-[#111114] p-3.5 text-xs">
                                     <div className="flex justify-between text-[#A1A1AA]">
                                         <span>Subtotal Tiket:</span>
-                                        <span className="font-medium text-white">{formatCurrency(subtotal)}</span>
+                                        <span className="font-medium text-white">
+                                            {formatCurrency(subtotal)}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between text-[#A1A1AA]">
                                         <span>Biaya Layanan:</span>
                                         <span className="font-medium text-white">
-                                            {selectedSeatIds.length > 0 ? formatCurrency(config.service_fee) : 'Rp 0'}
+                                            {selectedSeatIds.length > 0
+                                                ? formatCurrency(
+                                                      config.service_fee,
+                                                  )
+                                                : 'Rp 0'}
                                         </span>
                                     </div>
                                     {discount > 0 && (
-                                        <div className="flex justify-between text-emerald-400 font-medium">
-                                            <span>Diskon Promo ({appliedVoucher?.code}):</span>
-                                            <span>-{formatCurrency(discount)}</span>
+                                        <div className="flex justify-between font-medium text-emerald-400">
+                                            <span>
+                                                Diskon Promo (
+                                                {appliedVoucher?.code}):
+                                            </span>
+                                            <span>
+                                                -{formatCurrency(discount)}
+                                            </span>
                                         </div>
                                     )}
-                                    <div className="border-t border-[#27272A] pt-2.5 flex justify-between text-sm font-semibold text-white">
+                                    <div className="flex justify-between border-t border-[#27272A] pt-2.5 text-sm font-semibold text-white">
                                         <span>Total:</span>
-                                        <span className="text-white font-bold">{formatCurrency(totalAmount)}</span>
+                                        <span className="font-bold text-white">
+                                            {formatCurrency(totalAmount)}
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2.5">
                                     <Button
                                         onClick={handleProceedCheckout}
-                                        disabled={selectedSeatIds.length === 0 || processing}
-                                        className="w-full rounded-lg bg-[#E50914] hover:bg-red-700 text-white font-medium h-10 text-sm"
+                                        disabled={
+                                            selectedSeatIds.length === 0 ||
+                                            processing
+                                        }
+                                        className="h-10 w-full rounded-lg bg-[#E50914] text-sm font-medium text-white hover:bg-red-700"
                                     >
                                         <ShieldCheck className="mr-1.5 size-4" />
-                                        Lanjutkan ke Pembayaran {totalAmount > 0 && `• ${formatCurrency(totalAmount)}`}
+                                        Lanjutkan ke Pembayaran{' '}
+                                        {totalAmount > 0 &&
+                                            `• ${formatCurrency(totalAmount)}`}
                                     </Button>
 
-                                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#71717A] text-center">
-                                        <Info className="size-3 text-[#71717A] shrink-0" />
-                                        <span>Pencegahan double-booking aktif secara otomatis.</span>
+                                    <div className="flex items-center justify-center gap-1.5 text-center text-[11px] text-[#71717A]">
+                                        <Info className="size-3 shrink-0 text-[#71717A]" />
+                                        <span>
+                                            Pencegahan double-booking aktif
+                                            secara otomatis.
+                                        </span>
                                     </div>
                                 </div>
                             </CardContent>

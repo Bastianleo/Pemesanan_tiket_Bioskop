@@ -132,7 +132,7 @@ export default function Welcome({
                                 >
                                     <CardContent className="space-y-3 p-4">
                                         <div className="flex items-center justify-between">
-                                            <span className="rounded border border-[#27272A] bg-black/60 px-2 py-1 font-mono text-xs font-semibold tracking-wider text-white">
+                                            <span className="rounded border border-[#27272A] bg-black/60 px-2 py-1 text-xs font-semibold tracking-wider text-white">
                                                 {p.code}
                                             </span>
                                             <span className="text-[11px] font-medium text-red-400">

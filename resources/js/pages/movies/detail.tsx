@@ -70,14 +70,29 @@ export default function MovieDetail({
     const getEmbedUrl = (url: string | null) => {
         if (!url) return null;
         const regExp =
-            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/;
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         return match && match[2].length === 11
-            ? `https://www.youtube.com/embed/${match[2]}?autoplay=1`
+            ? `https://www.youtube.com/embed/${match[2]}?autoplay=1&rel=0`
             : url;
     };
 
     const embedUrl = getEmbedUrl(movie.trailer_url);
+
+    const formatReleaseDate = (dateStr: string | null) => {
+        if (!dateStr) return '-';
+        try {
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        } catch {
+            return dateStr;
+        }
+    };
 
     const handleDateChange = (date: string) => {
         router.get(
@@ -134,162 +149,167 @@ export default function MovieDetail({
             <Head title={`${movie.title} - Jadwal Tayang & Tiket Online`} />
 
             {/* Backdrop Banner Section */}
-            <div className="relative h-[300px] w-full overflow-hidden bg-[#09090B] sm:h-[400px]">
+            <div className="relative h-[280px] w-full overflow-hidden bg-[#09090B] sm:h-[380px] lg:h-[440px]">
                 <img
                     src={movie.banner_path || movie.poster_path}
                     alt={movie.title}
-                    className="h-full w-full object-cover brightness-[0.35] filter"
+                    className="h-full w-full object-cover brightness-[0.4] filter"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/60 to-transparent" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/70 to-transparent" />
             </div>
 
             {/* Main Movie Info & Schedule Picker */}
-            <div className="relative z-10 mx-auto -mt-24 w-full max-w-[1600px] space-y-12 px-4 pb-16 sm:-mt-32 sm:px-6 lg:px-8 xl:px-12">
+            <div className="relative z-10 mx-auto -mt-28 w-full max-w-[1600px] space-y-12 px-4 pb-16 sm:-mt-36 sm:px-6 lg:px-8 xl:px-12">
                 {/* Header Profile Card */}
-                <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
-                    <div className="flex min-w-0 flex-1 flex-col gap-6 md:flex-row md:items-start">
-                        {/* Poster */}
-                        <div className="w-40 shrink-0 overflow-hidden rounded-xl border border-[#27272A] bg-[#111114] shadow-2xl sm:w-52">
-                            <img
-                                src={
-                                    movie.poster_path
-                                        ? movie.poster_path.startsWith(
-                                              'http',
-                                          ) || movie.poster_path.startsWith('/')
-                                            ? movie.poster_path
-                                            : `/storage/${movie.poster_path}`
-                                        : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
-                                }
-                                alt={movie.title}
-                                className="aspect-[2/3] w-full object-cover"
-                            />
-                        </div>
-
-                        {/* Metadata Details */}
-                        <div className="min-w-0 flex-1 space-y-4 pt-2">
-                            <div className="flex flex-wrap items-center gap-2">
-                                <span className="rounded border border-[#27272A] bg-[#18181B] px-2 py-0.5 text-xs font-semibold text-zinc-300">
-                                    {movie.rating_age}
-                                </span>
-                                <span className="rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-xs font-medium text-zinc-300">
-                                    {movie.status === 'now_showing'
-                                        ? 'Sedang Tayang'
-                                        : 'Segera Tayang'}
-                                </span>
-                                <div className="flex items-center gap-1.5 text-xs text-[#A1A1AA]">
-                                    <Clock className="size-3.5 text-zinc-400" />
-                                    <span>{movie.duration_minutes} Menit</span>
-                                </div>
-                            </div>
-
-                            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-4xl">
-                                {movie.title}
-                            </h1>
-
-                            <div className="flex flex-wrap gap-1.5">
-                                {movie.genres?.map((g) => (
-                                    <span
-                                        key={g.id}
-                                        className="rounded border border-[#27272A] bg-[#18181B] px-2.5 py-1 text-xs font-medium text-[#A1A1AA]"
-                                    >
-                                        {g.name}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="grid gap-2 border-y border-[#27272A] py-3.5 text-xs text-zinc-300 sm:grid-cols-2">
-                                <div>
-                                    <strong className="text-[#71717A]">
-                                        Sutradara:
-                                    </strong>{' '}
-                                    {movie.director}
-                                </div>
-                                <div>
-                                    <strong className="text-[#71717A]">
-                                        Tanggal Rilis:
-                                    </strong>{' '}
-                                    {movie.release_date}
-                                </div>
-                                <div>
-                                    <strong className="text-[#71717A]">
-                                        Bahasa:
-                                    </strong>{' '}
-                                    {movie.language} (Sub: {movie.subtitle})
-                                </div>
-                                <div className="line-clamp-1">
-                                    <strong className="text-[#71717A]">
-                                        Pemeran:
-                                    </strong>{' '}
-                                    {movie.cast}
-                                </div>
-                            </div>
-
-                            <div className="space-y-1">
-                                <h3 className="text-xs font-semibold tracking-wider text-[#71717A] uppercase">
-                                    Sinopsis Cerita
-                                </h3>
-                                <p className="max-w-3xl text-xs leading-relaxed text-[#A1A1AA] sm:text-sm">
-                                    {movie.synopsis}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2 pt-1">
-                                {embedUrl && (
-                                    <Button
-                                        type="button"
-                                        size="sm"
-                                        onClick={() => setTrailerOpen(true)}
-                                        className="h-8 cursor-pointer rounded-lg border border-zinc-700 bg-zinc-800 text-xs font-medium text-white hover:bg-zinc-700"
-                                    >
-                                        <Play className="mr-1.5 size-3 fill-current text-red-500" />
-                                        Putar Trailer
-                                    </Button>
-                                )}
-
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() =>
-                                        router.post(
-                                            `/favorites/${movie.id}/toggle`,
-                                            {},
-                                            { preserveScroll: true },
-                                        )
-                                    }
-                                    className="h-8 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:border-zinc-700 hover:text-white"
-                                >
-                                    <Heart className="mr-1.5 size-3.5 text-red-500" />
-                                    Favorit
-                                </Button>
-
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleShare}
-                                    className="h-8 rounded-lg border-[#27272A] bg-[#18181B] text-xs text-zinc-300 hover:border-zinc-700 hover:text-white"
-                                >
-                                    <Share2 className="mr-1.5 size-3.5" />
-                                    Bagikan
-                                </Button>
-                            </div>
-                        </div>
+                <div className="flex flex-col gap-8 md:flex-row md:items-start">
+                    {/* Poster */}
+                    <div className="group relative w-44 shrink-0 overflow-hidden rounded-2xl border border-[#27272A] bg-[#111114] shadow-2xl shadow-black/80 sm:w-56">
+                        <img
+                            src={
+                                movie.poster_path
+                                    ? movie.poster_path.startsWith('http') ||
+                                      movie.poster_path.startsWith('/')
+                                        ? movie.poster_path
+                                        : `/storage/${movie.poster_path}`
+                                    : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
+                            }
+                            alt={movie.title}
+                            className="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                     </div>
 
-                    {/* Trailer Button on Top Right (Desktop) */}
-                    {embedUrl && (
-                        <div className="hidden shrink-0 pt-2 md:block">
-                            <Button
-                                type="button"
-                                onClick={() => setTrailerOpen(true)}
-                                size="sm"
-                                className="h-9 cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900/90 px-4 font-medium text-white shadow-xl backdrop-blur-md transition-transform hover:scale-105 hover:bg-zinc-800"
+                    {/* Metadata Details */}
+                    <div className="min-w-0 flex-1 space-y-5 pt-2">
+                        {/* Rating, Status, Duration Badges */}
+                        <div className="flex flex-wrap items-center gap-2.5">
+                            <span className="rounded-md border border-[#27272A] bg-[#18181B] px-2.5 py-0.5 text-xs font-semibold text-zinc-300">
+                                {movie.rating_age}
+                            </span>
+                            <span
+                                className={`rounded-md px-2.5 py-0.5 text-xs font-medium ${
+                                    movie.status === 'now_showing'
+                                        ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                        : 'border border-amber-500/20 bg-amber-500/10 text-amber-400'
+                                }`}
                             >
-                                <Play className="mr-1.5 size-3.5 fill-current text-white" />
-                                Putar Trailer
+                                {movie.status === 'now_showing'
+                                    ? 'Sedang Tayang'
+                                    : 'Segera Tayang'}
+                            </span>
+                            <div className="flex items-center gap-1.5 text-xs font-medium text-[#A1A1AA]">
+                                <Clock className="size-3.5 text-zinc-400" />
+                                <span>{movie.duration_minutes} Menit</span>
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                            {movie.title}
+                        </h1>
+
+                        {/* Genre Tags */}
+                        <div className="flex flex-wrap gap-2">
+                            {movie.genres?.map((g) => (
+                                <span
+                                    key={g.id}
+                                    className="rounded-lg border border-[#27272A] bg-[#18181B] px-3 py-1 text-xs font-medium text-zinc-300"
+                                >
+                                    {g.name}
+                                </span>
+                            ))}
+                        </div>
+
+                        {/* Production Info Grid */}
+                        <div className="grid grid-cols-2 gap-4 border-y border-[#27272A] py-4 text-xs text-zinc-300 sm:grid-cols-4">
+                            <div>
+                                <span className="mb-1 block text-[11px] font-medium text-[#71717A]">
+                                    Sutradara
+                                </span>
+                                <span className="font-semibold text-zinc-200">
+                                    {movie.director || '-'}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="mb-1 block text-[11px] font-medium text-[#71717A]">
+                                    Tanggal Rilis
+                                </span>
+                                <span className="font-semibold text-zinc-200">
+                                    {formatReleaseDate(movie.release_date)}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="mb-1 block text-[11px] font-medium text-[#71717A]">
+                                    Bahasa
+                                </span>
+                                <span className="font-semibold text-zinc-200">
+                                    {movie.language || 'Indonesia'} (Sub:{' '}
+                                    {movie.subtitle || 'Indonesia'})
+                                </span>
+                            </div>
+                            <div>
+                                <span className="mb-1 block text-[11px] font-medium text-[#71717A]">
+                                    Pemeran
+                                </span>
+                                <span
+                                    className="line-clamp-1 font-semibold text-zinc-200"
+                                    title={movie.cast || '-'}
+                                >
+                                    {movie.cast || '-'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Synopsis */}
+                        <div className="space-y-1.5">
+                            <h3 className="text-xs font-semibold tracking-wider text-[#71717A] uppercase">
+                                Sinopsis Cerita
+                            </h3>
+                            <p className="max-w-3xl text-xs leading-relaxed text-[#A1A1AA] sm:text-sm">
+                                {movie.synopsis}
+                            </p>
+                        </div>
+
+                        {/* Action Row: Trailer, Favorit, Bagikan */}
+                        <div className="flex flex-wrap items-center gap-3 pt-2">
+                            {embedUrl && (
+                                <Button
+                                    type="button"
+                                    onClick={() => setTrailerOpen(true)}
+                                    className="h-9 cursor-pointer rounded-lg bg-[#E50914] px-4 text-xs font-semibold text-white shadow-lg shadow-red-950/40 transition-all hover:scale-[1.02] hover:bg-red-700"
+                                >
+                                    <Play className="mr-1.5 size-3.5 fill-current" />
+                                    Tonton Trailer
+                                </Button>
+                            )}
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                    router.post(
+                                        `/favorites/${movie.id}/toggle`,
+                                        {},
+                                        { preserveScroll: true },
+                                    )
+                                }
+                                className="h-9 cursor-pointer rounded-lg border-[#27272A] bg-[#18181B] text-xs font-medium text-zinc-300 hover:border-zinc-700 hover:text-white"
+                            >
+                                <Heart className="mr-1.5 size-3.5 text-red-500" />
+                                Favorit
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleShare}
+                                className="h-9 cursor-pointer rounded-lg border-[#27272A] bg-[#18181B] text-xs font-medium text-zinc-300 hover:border-zinc-700 hover:text-white"
+                            >
+                                <Share2 className="mr-1.5 size-3.5" />
+                                Bagikan
                             </Button>
                         </div>
-                    )}
+                    </div>
                 </div>
 
                 {/* SHOWTIMES BOOKING WIDGET */}
@@ -332,7 +352,7 @@ export default function MovieDetail({
                     </div>
 
                     {/* Available Date Tabs */}
-                    <div className="flex scrollbar-none items-center gap-2 overflow-x-auto pb-2">
+                    <div className="flex scrollbar-none items-center gap-2.5 overflow-x-auto pb-2">
                         {availableDates.map((item) => {
                             const isSelected = item.date === selectedDate;
                             return (
@@ -340,16 +360,16 @@ export default function MovieDetail({
                                     key={item.date}
                                     type="button"
                                     onClick={() => handleDateChange(item.date)}
-                                    className={`flex shrink-0 flex-col items-center justify-center rounded-lg px-4 py-2 transition-colors ${
+                                    className={`flex min-w-[76px] cursor-pointer flex-col items-center justify-center rounded-xl px-4 py-2.5 transition-all ${
                                         isSelected
-                                            ? 'bg-[#E50914] font-semibold text-white'
+                                            ? 'scale-[1.02] bg-[#E50914] font-semibold text-white shadow-lg shadow-red-950/40'
                                             : 'border border-[#27272A] bg-[#18181B] text-[#A1A1AA] hover:border-zinc-700 hover:text-white'
                                     }`}
                                 >
-                                    <span className="text-[10px] opacity-80">
+                                    <span className="text-[10px] uppercase tracking-wider opacity-80">
                                         {item.day_name}
                                     </span>
-                                    <span className="text-xs font-semibold">
+                                    <span className="mt-0.5 text-xs font-bold">
                                         {item.formatted}
                                     </span>
                                 </button>
@@ -429,7 +449,7 @@ export default function MovieDetail({
                                                     {/* Showtime Buttons */}
                                                     <div className="flex flex-wrap gap-2.5">
                                                         {studio.showtimes.map(
-                                                            (st) => {
+                                                             (st) => {
                                                                 const totalSeats =
                                                                     studio.total_seats ||
                                                                     60;
@@ -448,8 +468,8 @@ export default function MovieDetail({
                                                                         href={`/booking/${st.id}/seats`}
                                                                         className="group"
                                                                     >
-                                                                        <div className="flex flex-col items-center justify-center rounded-lg border border-[#27272A] bg-[#18181B] px-3.5 py-2 transition-colors group-hover:border-[#E50914] group-hover:bg-zinc-800">
-                                                                            <span className="font-mono text-sm font-semibold text-white group-hover:text-red-400">
+                                                                        <div className="flex flex-col items-center justify-center rounded-xl border border-[#27272A] bg-[#18181B] px-4 py-2.5 transition-all group-hover:scale-105 group-hover:border-[#E50914] group-hover:bg-zinc-800">
+                                                                            <span className="text-sm font-semibold text-white group-hover:text-red-400">
                                                                                 {st.start_time.substring(
                                                                                     0,
                                                                                     5,
@@ -483,25 +503,15 @@ export default function MovieDetail({
                 <Dialog open={trailerOpen} onOpenChange={setTrailerOpen}>
                     <DialogContent className="overflow-hidden rounded-2xl border-[#27272A] bg-[#0E0E11] p-0 shadow-2xl shadow-red-950/20 sm:max-w-4xl lg:max-w-5xl">
                         {/* Cinema Header */}
-                        <div className="flex items-center justify-between border-b border-[#27272A] bg-gradient-to-r from-[#141418] via-[#18181D] to-[#141418] px-5 py-3.5 pr-14">
-                            <div className="flex min-w-0 items-center gap-3">
-                                <span className="flex shrink-0 items-center gap-1.5 rounded-md border border-[#E50914]/30 bg-[#E50914]/15 px-2.5 py-1 text-[10px] font-bold tracking-wider text-[#E50914] uppercase">
-                                    <span className="size-1.5 animate-pulse rounded-full bg-[#E50914]" />
-                                    Official Trailer
+                        <div className="flex items-center justify-between border-b border-[#27272A] bg-[#141418] px-5 py-3.5 pr-14">
+                            <div className="flex min-w-0 items-center gap-2.5">
+                                <span className="text-xs font-semibold uppercase tracking-wider text-[#E50914]">
+                                    Trailer
                                 </span>
+                                <span className="text-zinc-600">•</span>
                                 <DialogTitle className="truncate text-sm font-bold text-white sm:text-base">
                                     {movie.title}
                                 </DialogTitle>
-                                {movie.rating_age && (
-                                    <span className="hidden shrink-0 rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[10px] font-semibold text-zinc-300 sm:inline-block">
-                                        {movie.rating_age}
-                                    </span>
-                                )}
-                                {movie.duration_minutes && (
-                                    <span className="hidden shrink-0 text-xs text-zinc-400 sm:inline-block">
-                                        {movie.duration_minutes} Menit
-                                    </span>
-                                )}
                             </div>
                         </div>
 
@@ -551,7 +561,7 @@ export default function MovieDetail({
                                             });
                                         }
                                     }}
-                                    className="h-8 rounded-lg bg-[#E50914] px-4 text-xs font-medium text-white shadow-md hover:bg-red-700"
+                                    className="h-8 rounded-lg bg-[#E50914] px-4 text-xs font-medium text-white hover:bg-red-700"
                                 >
                                     Pilih Jadwal & Pesan
                                 </Button>

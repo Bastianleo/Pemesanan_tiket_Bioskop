@@ -90,7 +90,8 @@ export default function MyFavoritesPage({ favorites }: Props) {
                                                         : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80'
                                                 }
                                                 alt={movie.title}
-                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                                                className="h-full w-full object-cover"
+                                                loading="lazy"
                                             />
 
                                             <div className="absolute top-2 left-2">

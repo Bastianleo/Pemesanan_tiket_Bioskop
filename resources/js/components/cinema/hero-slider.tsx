@@ -17,24 +17,26 @@ interface Props {
 export default function HeroSlider({ movies }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
-
-    // Auto rotate every 6 seconds
-    useEffect(() => {
-        if (movies.length <= 1) return;
-        const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % movies.length);
-        }, 6000);
-        return () => clearInterval(interval);
-    }, [movies.length]);
+    const [isPaused, setIsPaused] = useState(false);
 
     if (!movies || movies.length === 0) return null;
+
+    useEffect(() => {
+        if (movies.length <= 1 || isPaused || trailerUrl !== null) return;
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % movies.length);
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [movies.length, isPaused, trailerUrl]);
 
     const currentMovie = movies[currentIndex];
 
     const getEmbedUrl = (url: string | null) => {
         if (!url) return null;
         const regExp =
-            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/;
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         return match && match[2].length === 11
             ? `https://www.youtube.com/embed/${match[2]}?autoplay=1`
@@ -42,7 +44,11 @@ export default function HeroSlider({ movies }: Props) {
     };
 
     return (
-        <div className="relative h-[480px] w-full overflow-hidden bg-[#09090B] sm:h-[560px]">
+        <div
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            className="relative h-[480px] w-full overflow-hidden bg-[#09090B] sm:h-[560px]"
+        >
             {/* Banner Background Image with Fade Effect */}
             <div className="absolute inset-0">
                 <img
